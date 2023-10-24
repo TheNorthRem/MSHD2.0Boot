@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://bj-cynosdbmysql-grp-p55yr6pq.sql.tencentcdb.com:29754/MSHD2?useSSL=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: syc
+    password: syc123456!
+  data:
+    redis:
+      database: 0
+      host: 127.0.0.1
+      lettuce:
+        pool:
+          max-active: -1
+          max-idle: 0
+          max-wait: -1ms
+          min-idle: 0
+        shutdown-timeout: 100ms
+      password: ''
+      port: 6379
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+server:
+  port: 8081
