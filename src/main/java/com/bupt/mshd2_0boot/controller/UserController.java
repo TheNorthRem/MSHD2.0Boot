@@ -18,27 +18,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/User")
 @Slf4j
-@Tag(name="用户")
+@Tag(name = "用户")
 public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
-        this.userService=userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
 
     @GetMapping("/Login")
     @Operation(summary = "登录")
-    @Parameters({@Parameter(name = "username",description = "用户名"),@Parameter(name = "password",description = "密码")})
-    public Result Login(@RequestParam(name = "username") String username, @RequestParam(name="password") String password){
+    @Parameters({@Parameter(name = "username", description = "用户名"), @Parameter(name = "password", description = "密码")})
+    public Result Login(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 
-        queryWrapper.eq("username",username);
+        queryWrapper.eq("username", username);
 
         long count = userService.count(queryWrapper);
 
-        if(count==0){
+        if (count == 0) {
             return Result.fail("用户名不存在");
         }
 
@@ -49,9 +49,9 @@ public class UserController {
 
         User user = userService.getOne(queryWrapper);
 
-        if(password.equals(user.getPassword())){
-            JSONObject res =new JSONObject();
-            res.put("userId",user.getId());
+        if (password.equals(user.getPassword())) {
+            JSONObject res = new JSONObject();
+            res.put("userId", user.getId());
 
             return Result.ok(res);
         }
@@ -61,17 +61,17 @@ public class UserController {
 
     @RequestMapping("/register")
     @Operation(summary = "注册")
-    @Parameters({@Parameter(name = "username",description = "用户名"),@Parameter(name = "password",description = "密码"),
-        @Parameter(name = "phone",description = "手机号")
+    @Parameters({@Parameter(name = "username", description = "用户名"), @Parameter(name = "password", description = "密码"),
+            @Parameter(name = "phone", description = "手机号")
     })
-    public Result Register(@RequestBody JSONObject data){
+    public Result Register(@RequestBody JSONObject data) {
         String username = data.getString("username");
         String password = data.getString("password");
         String phone = data.getString("phone");
 
 
         //检查密码是否合规
-        if (!Utils.checkData(username, password,phone)) {
+        if (!Utils.checkData(username, password, phone)) {
             return Result.fail("用户名或密码不合要求！");
         }
 
