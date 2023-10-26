@@ -94,15 +94,12 @@ public class UserController {
             return Result.fail("注册失败，请联系客服");
         }
 
-        //获取id
-        Integer userId;
         try {
-            userId = userService.list(queryWrapper).get(0).getId();
+            userService.list(queryWrapper).get(0).getId();
         } catch (IndexOutOfBoundsException exception) {
             log.error("user表出现错误!");
             return Result.fail("后台出现错误，请联系客服!");
         }
-
 
         return Result.ok("注册成功!");
 
