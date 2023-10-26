@@ -11,22 +11,37 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @TableName("user")
 @Schema(description = "用户信息")
 public class User {
+
+    public User(){
+        this.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
+        this.setUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
+    }
+
+
+
     @TableId(type = IdType.AUTO)
     @Schema(description = "主键，用户id")
     private Integer id;
+
+    @TableField("username")
+    @Schema(description = "用户名")
+    private String username;
+
+    @TableField("password")
+    @Schema(description = "密码")
+    private String password;
 
     @TableField("phone")
     @Schema(description = "电话号码")
     private String phone;
 
-    @TableField("password")
-    @Schema(description = "密码")
-    private String password;
+
 
     @TableField("nick_name")
     @Schema(description = "用户名")
@@ -47,4 +62,9 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updateTime;
+
+    @TableField("privilege")
+    @Schema(description = "权限")
+    private Integer privilege;
+
 }
