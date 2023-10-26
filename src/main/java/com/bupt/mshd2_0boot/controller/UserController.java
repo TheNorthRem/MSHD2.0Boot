@@ -65,7 +65,6 @@ public class UserController {
         String username = data.getString("username");
         String password = data.getString("password");
         String phone = data.getString("phone");
-        String intro = data.getString("intro");
 
 
         //检查密码是否合规
