@@ -87,7 +87,7 @@ public class UserController {
         user.setPassword(password);
         //注册的时候默认nickname == username
         user.setNickName(username);
-
+        user.setPrivilege(0);
         //将用户存入bs_user表中
         if (!userService.save(user)) {
             log.error("bs_user表插入失败!");
