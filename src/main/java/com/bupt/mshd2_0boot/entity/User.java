@@ -7,23 +7,19 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @TableName("user")
 @Schema(description = "用户信息")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-
-    public User(){
-        this.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
-        this.setUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
-    }
-
-
 
     @TableId(type = IdType.AUTO)
     @Schema(description = "主键，用户id")
@@ -40,12 +36,6 @@ public class User {
     @TableField("phone")
     @Schema(description = "电话号码")
     private String phone;
-
-
-
-    @TableField("nick_name")
-    @Schema(description = "用户名")
-    private String nickName;
 
     @TableField("icon")
     @Schema(description = "头像")
@@ -66,5 +56,4 @@ public class User {
     @TableField("privilege")
     @Schema(description = "权限")
     private Integer privilege;
-
 }

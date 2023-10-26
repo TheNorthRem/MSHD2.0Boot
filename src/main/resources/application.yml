@@ -21,5 +21,8 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+logging:
+  level:
+    com.bupt.mshd2_0boot.mapper: debug
 server:
   port: 8081
