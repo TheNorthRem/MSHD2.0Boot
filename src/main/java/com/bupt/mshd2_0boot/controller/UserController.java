@@ -7,6 +7,7 @@ import com.bupt.mshd2_0boot.entity.User;
 import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.Result;
 import com.bupt.mshd2_0boot.utils.Utils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,7 @@ public class UserController {
 
 
     @GetMapping("/Login")
+    @Operation(summary = "登录")
     @Parameters({@Parameter(name = "username",description = "用户名"),@Parameter(name = "password",description = "密码")})
     public Result Login(@RequestParam(name = "username") String username, @RequestParam(name="password") String password){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -58,6 +60,7 @@ public class UserController {
     }
 
     @RequestMapping("/register")
+    @Operation(summary = "注册")
     @Parameters({@Parameter(name = "username",description = "用户名"),@Parameter(name = "password",description = "密码"),
         @Parameter(name = "phone",description = "手机号")
     })
