@@ -30,7 +30,7 @@ public class EncodeUtils {
 
     public void parseCode() {
         Resource resource = resourceLoader.getResource("classpath:Code.json");
-        File file = null;
+        File file;
 
         String str=null;
 
@@ -52,9 +52,7 @@ public class EncodeUtils {
 
         JSONObject loaderCode= data.getJSONObject("LoaderCode");
         JSONObject CodeLoader=new JSONObject();
-        loaderCode.forEach((k,v)->{
-            CodeLoader.put((String) v,k);
-        });
+        loaderCode.forEach((k,v)-> CodeLoader.put((String) v,k));
 
         res.put("loaderCode",CodeLoader);
 
@@ -80,9 +78,7 @@ public class EncodeUtils {
             String mainCode = v.getString("code");
             JSONObject obj=new JSONObject();
             JSONObject subCode=v.getJSONObject("subCode");
-            subCode.forEach((t,sCode)->{
-                obj.put((String)sCode,t);
-            });
+            subCode.forEach((t,sCode)-> obj.put((String)sCode,t));
             obj.put("type",key);
             typeReverse.put(mainCode,obj);
         });
@@ -108,7 +104,6 @@ public class EncodeUtils {
      * Value 必须和JSON 文件中的值一致
      * Type 指的是 主类信息
      * Sub 指的是子类信息
-     *
      * 示例见 ApplicationTest 中的 EncodeTest方法
      *
      */
@@ -143,8 +138,8 @@ public class EncodeUtils {
      * 参考示例见 ApplicationTest 中的 decodeTest 方法
      * */
     public   Map<String,String> decodes(String str){
-        String Position=str.substring(0,12);
-        String Time =str.substring(12,26);
+//        String Position=str.substring(0,12);
+//        String Time =str.substring(12,26);
         String Source=str.substring(26,27);
         String SourceSub=str.substring(27,29);
         String loaderType=str.substring(29,30);
