@@ -1,10 +1,12 @@
 package com.bupt.mshd2_0boot.utils;
 
 import cn.hutool.core.util.StrUtil;
+import org.springframework.stereotype.Component;
 
 /**
  * 工具类
  */
+@Component
 public class Utils {
     /**
      * 检查账号长度是否在6-16之间
@@ -30,4 +32,6 @@ public class Utils {
         }
         return !str.matches(ConstData.PHONE_REGEX);
     }
+
+
 }
