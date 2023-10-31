@@ -102,6 +102,14 @@ public class EncodeUtils {
     /**
      *
      *SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategoryType","CategorySub"
+     *参考Code.json
+     * Map中的所有传值都必须以键值对的形式
+     * Key 对应 上面的
+     * Value 必须和JSON 文件中的值一致
+     * Type 指的是 主类信息
+     * Sub 指的是子类信息
+     *
+     * 示例见 ApplicationTest 中的 EncodeTest方法
      *
      */
 
@@ -129,6 +137,11 @@ public class EncodeUtils {
         m.put(subKey,SU.getString(subCode));
     }
 
+
+    /**
+     * 传入编码 ，返回 键值对
+     * 参考示例见 ApplicationTest 中的 decodeTest 方法
+     * */
     public   Map<String,String> decodes(String str){
         String Position=str.substring(0,12);
         String Time =str.substring(12,26);

@@ -22,14 +22,13 @@ class ApplicationTests {
     void decodeTest(){
          Map<String, String> decodes = util.decodes("632626200206202105220204001010302001");
          System.out.println(decodes);
-         String code="632626200206202105220204001010302001";
-         System.out.println(code.length());
+
      }
 
 
 
     @Test
-    void contextLoads() {
+    void EncodeTest() {
         Map<String,String> m=new HashMap<>();
 
         String [] key={"SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategoryType","CategorySub"};
