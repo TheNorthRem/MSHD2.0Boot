@@ -26,6 +26,7 @@ public class GaoDeAPI {
      * 若返回null，说明地点不合规或者请求超时
      */
     public static String getAddressCode(String address) {
+        // 请求URL
         JSONObject responseBody = GaoDeAPI.getGaoDeDistrictApi(address);
         if (responseBody == null) { //URL请求失败
             return null;
@@ -46,10 +47,12 @@ public class GaoDeAPI {
      * 若返回null，说明行政区编码不合规或者请求超时
      */
     public static String getAddress(String addressCode) {
+        // 请求URL
         JSONObject responseBody = GaoDeAPI.getGaoDeDistrictApi(addressCode);
         if (responseBody == null) { //URL请求失败
             return null;
         }
+        // 获取districts.name(行政区名称)，数据为空解析就会抛出异常，通过catch块返回空
         try {
             JSONArray districts = (JSONArray) responseBody.get("districts");
             return ((JSONObject) districts.get(0)).get("name").toString();
