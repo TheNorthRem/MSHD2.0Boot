@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * 工具类
  */
 @Component
-public class Utils {
+public class Tools {
     /**
      * 检查账号长度是否在6-16之间
      * 检查密码长度是否在6-18之间
@@ -32,6 +32,4 @@ public class Utils {
         }
         return !str.matches(ConstData.PHONE_REGEX);
     }
-
-
 }

@@ -7,7 +7,7 @@ import com.bupt.mshd2_0boot.mapper.UserMapper;
 import com.bupt.mshd2_0boot.entity.User;
 import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.Result;
-import com.bupt.mshd2_0boot.utils.Utils;
+import com.bupt.mshd2_0boot.utils.Tools;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,7 +18,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result login(String phone, String password) {
-        if (Utils.isPhoneInvalid(phone)) {
+        if (Tools.isPhoneInvalid(phone)) {
             return Result.fail("手机号格式错误!");
         }
 
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result register(String userName, String phone, String password) {
-        if (!Utils.checkData(userName, password, phone)) {
+        if (!Tools.checkData(userName, password, phone)) {
             return Result.fail("用户名/密码/手机号码不合要求！");
         }
 
