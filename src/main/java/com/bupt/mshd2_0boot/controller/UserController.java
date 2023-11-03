@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/User")
@@ -27,19 +24,26 @@ public class UserController {
     }
 
 
-    @GetMapping("/Login")
+    @GetMapping("/login")
     @Operation(summary = "登录")
     @Parameters({@Parameter(name = "phone", description = "电话号码"), @Parameter(name = "password", description = "密码")})
-    public Result Login(@RequestParam(name = "phone") String phone, @RequestParam(name = "password") String password) {
+    public Result login(@RequestParam(name = "phone") String phone, @RequestParam(name = "password") String password) {
         return userService.login(phone, password);
     }
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     @Operation(summary = "注册")
     @Parameters({@Parameter(name = "username", description = "用户名"), @Parameter(name = "password", description = "密码"),
             @Parameter(name = "phone", description = "手机号")
     })
-    public Result Register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "phone") String phone) {
+    public Result register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "phone") String phone) {
         return userService.register(username, phone, password);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "注销账号")
+    @Parameters({@Parameter(name = "phone", description = "电话号码"), @Parameter(name = "password", description = "密码")})
+    public Result delete(@RequestParam(name = "phone") String phone, @RequestParam(name = "password") String password) {
+        return userService.delete(phone, password);
     }
 }

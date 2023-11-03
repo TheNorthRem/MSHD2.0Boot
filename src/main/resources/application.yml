@@ -15,7 +15,6 @@ spring:
           max-wait: -1ms
           min-idle: 0
         shutdown-timeout: 100ms
-      password: ''
       port: 6379
   servlet:
     multipart:
