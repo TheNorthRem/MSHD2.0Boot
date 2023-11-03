@@ -7,9 +7,11 @@ import com.bupt.mshd2_0boot.entity.AddressCode;
 import com.bupt.mshd2_0boot.mapper.AddressCodeMapper;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
 import com.bupt.mshd2_0boot.utils.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, AddressCode> implements AddressCodeService {
     @Override
     public Result getCode(String province, String city, String county, String town, String village) {
@@ -24,7 +26,14 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
         queryWrapper.eq("county", county);
         queryWrapper.eq("town", town);
         queryWrapper.eq("village", village);
-        AddressCode addressCode = this.getOne(queryWrapper);
+        AddressCode addressCode;
+        // 一旦有重复数据污染数据库记录到日志，同时提醒用户上报给数据库管理员
+        try {
+            addressCode = this.getOne(queryWrapper);
+        } catch (Exception exception) {
+            log.error("数据库查询有误:{}", exception.getMessage());
+            return Result.fail("数据库数据有误！，请联系数据库管理员！");
+        }
         // 若查询不到则返回错误信息，否则返回地区编码
         return addressCode != null ? Result.ok(addressCode.getId()) : Result.fail("没有该地区数据!");
     }
