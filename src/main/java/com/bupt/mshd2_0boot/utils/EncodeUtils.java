@@ -25,7 +25,7 @@ public class EncodeUtils {
 
     private JSONObject decode;
 
-    private AddressCodeService addressCodeService;
+    private final AddressCodeService  addressCodeService;
     @Autowired
     public EncodeUtils(ResourceLoader resourceLoader,AddressCodeService addressCodeService){
         this.resourceLoader=resourceLoader;
@@ -165,7 +165,7 @@ public class EncodeUtils {
     private String _T(Map<String,String> data,String Main,String Sub,String SubType){
         String Code="";
         JSONObject  SourceType = this.encode.getJSONObject(Main).getJSONObject(data.get(Sub));
-        if(Main!="DisasterCategory")
+        if(Main.equals("DisasterCategory"))
             Code+=SourceType.getString("code");
         Code+=SourceType.getJSONObject("subCode").getString(data.get(SubType));
         return Code;
@@ -198,7 +198,7 @@ public class EncodeUtils {
         return res;
     }
 
-    private String[] keywords={
+    private final String[] keywords={
       "SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategoryType","CategorySub","province","city","county"
             ,"town","village"
     };
