@@ -12,12 +12,12 @@ import java.util.Map;
 
 @SpringBootTest
 class ApplicationTests {
-    @Autowired
-    EncodeUtils util;
+    private final EncodeUtils util;
     private final AddressCodeService addressCodeService;
 
     @Autowired
-    public ApplicationTests(AddressCodeService addressCodeService) {
+    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService) {
+        this.util = utils;
         this.addressCodeService = addressCodeService;
     }
 
@@ -33,8 +33,8 @@ class ApplicationTests {
     void EncodeTest() {
         Map<String, String> m = new HashMap<>();
 
-        String[] key = {"SourceType", "SourceSub", "LoaderType", "DisasterType", "DisasterSub", "CategoryType", "CategorySub","province","city","county","town","village","Time"};
-        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "人员伤亡及失踪信息", "受灾人数","山东省","济南市","商河县","龙桑寺镇","张佑村委会","2021092120314200"};
+        String[] key = {"SourceType", "SourceSub", "LoaderType", "DisasterType", "DisasterSub", "CategoryType", "CategorySub", "province", "city", "county", "town", "village", "Time"};
+        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "人员伤亡及失踪信息", "受灾人数", "山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会", "2021092120314200"};
 
         for (int i = 0; i < key.length; i++) {
             m.put(key[i], value[i]);
