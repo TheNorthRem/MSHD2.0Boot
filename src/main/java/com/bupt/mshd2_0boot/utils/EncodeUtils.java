@@ -163,8 +163,9 @@ public class EncodeUtils {
         _A("DisasterCategory",DisasterType,CategorySub,res,"CategoryType","CategorySub");
         res.put("Time",Time);
         AddressCode address = addressCodeService.getAddress(Position);
-        res.put("省",address.getCity());
-        res.put("市",address.getCounty());
+        res.put("省",address.getProvince());
+        res.put("市",address.getCity());
+        res.put("县",address.getCounty());
         res.put("镇",address.getTown());
         res.put("村",address.getVillage());
         return res;
