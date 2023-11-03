@@ -11,8 +11,8 @@ public interface AddressCodeService extends IService<AddressCode> {
      * @param city     城市
      * @param county   县/区
      * @param town     镇/街道
-     * @param village  村庄
-     * @return 地区编码/错误信息
+     * @param village  村庄/居委会
+     * @return 地区编码/错误时返回null
      */
     String getCode(String province, String city, String county, String town, String village);
 
@@ -20,7 +20,7 @@ public interface AddressCodeService extends IService<AddressCode> {
      * 根据地区编码来获取地区信息
      *
      * @param code 地区编码
-     * @return 地区值，以实体类的模式返回/错误信息
+     * @return 地区值，以实体类的模式返回/错误时返回null
      */
     AddressCode getAddress(String code);
 }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bupt.mshd2_0boot.entity.AddressCode;
 import com.bupt.mshd2_0boot.mapper.AddressCodeMapper;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
-import com.bupt.mshd2_0boot.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +26,14 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
         queryWrapper.eq("town", town);
         queryWrapper.eq("village", village);
         AddressCode addressCode;
-        // 一旦有重复数据污染数据库记录到日志，同时提醒用户上报给数据库管理员
+        // 一旦有重复数据污染数据库记录到日志，并且返回null
         try {
             addressCode = this.getOne(queryWrapper);
         } catch (Exception exception) {
-            log.error("数据库查询有误:{}", exception.getMessage());
+            log.error("数据库查询有误，可能出现了数据污染的情况:{}", exception.getMessage());
             return null;
         }
-        // 若查询不到则返回错误信息，否则返回地区编码
+        // 若查询不到编码则返回null，否则返回地区编码
         return addressCode != null ? addressCode.getId() : null;
     }
 
@@ -45,8 +44,7 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
             return null;
         }
         // 根据地区代码(主键)查询
-        AddressCode addressCode = this.getById(code);
-        // 若查询不到则返回错误信息，否则返回地区信息
-        return addressCode;
+        // 若查询不到则返回null，否则返回地区信息
+        return this.getById(code);
     }
 }
