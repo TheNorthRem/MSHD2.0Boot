@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, AddressCode> implements AddressCodeService {
     @Override
-    public Result getCode(String province, String city, String county, String town, String village) {
+    public String getCode(String province, String city, String county, String town, String village) {
         // 数据不合规直接报错
         if (!StrUtil.isAllNotBlank(province, city, county, town, village)) {
-            return Result.fail("输入地址不能为空!");
+            return null;
         }
         // 条件查询
         QueryWrapper<AddressCode> queryWrapper = new QueryWrapper<>();
@@ -32,21 +32,21 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
             addressCode = this.getOne(queryWrapper);
         } catch (Exception exception) {
             log.error("数据库查询有误:{}", exception.getMessage());
-            return Result.fail("数据库数据有误！，请联系数据库管理员！");
+            return null;
         }
         // 若查询不到则返回错误信息，否则返回地区编码
-        return addressCode != null ? Result.ok(addressCode.getId()) : Result.fail("没有该地区数据!");
+        return addressCode != null ? addressCode.getId() : null;
     }
 
     @Override
-    public Result getAddress(String code) {
+    public AddressCode getAddress(String code) {
         // 数据不合规直接报错
         if (StrUtil.isBlank(code)) {
-            return Result.fail("编码不能为空!");
+            return null;
         }
         // 根据地区代码(主键)查询
         AddressCode addressCode = this.getById(code);
         // 若查询不到则返回错误信息，否则返回地区信息
-        return addressCode != null ? Result.ok(addressCode) : Result.fail("查询不到该信息!");
+        return addressCode;
     }
 }

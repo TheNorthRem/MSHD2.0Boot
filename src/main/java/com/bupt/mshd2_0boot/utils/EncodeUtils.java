@@ -1,6 +1,8 @@
 package com.bupt.mshd2_0boot.utils;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.bupt.mshd2_0boot.entity.AddressCode;
+import com.bupt.mshd2_0boot.service.AddressCodeService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -20,9 +22,12 @@ public class EncodeUtils {
     private JSONObject encode;
 
     private JSONObject decode;
+
+    private AddressCodeService addressCodeService;
     @Autowired
-    public EncodeUtils(ResourceLoader resourceLoader){
+    public EncodeUtils(ResourceLoader resourceLoader,AddressCodeService addressCodeService){
         this.resourceLoader=resourceLoader;
+        this.addressCodeService=addressCodeService;
         parseCode();
     }
 
@@ -111,13 +116,18 @@ public class EncodeUtils {
     public  String Encodes(Map<String,String> data){
 
         String Code = "";
-
+        String province = data.get("province");
+        String city=data.get("city");
+        String county=data.get("county");
+        String town=data.get("town");
+        String village=data.get("village");
+        String address = this.addressCodeService.getCode(province, city, county, town, village);
+        Code+=address;
+        Code+=data.get("Time");
         Code+= _T(data,"SourceCode","SourceType","SourceSub");
         Code+= this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
         Code+= _T(data,"DisasterCode","DisasterType","DisasterSub");
         Code+= _T(data,"DisasterCategory","CategoryType","CategorySub");
-
-
         return Code ;
     }
 
@@ -138,8 +148,8 @@ public class EncodeUtils {
      * 参考示例见 ApplicationTest 中的 decodeTest 方法
      * */
     public   Map<String,String> decodes(String str){
-//        String Position=str.substring(0,12);
-//        String Time =str.substring(12,26);
+        String Position=str.substring(0,12);
+        String Time =str.substring(12,26);
         String Source=str.substring(26,27);
         String SourceSub=str.substring(27,29);
         String loaderType=str.substring(29,30);
@@ -147,12 +157,16 @@ public class EncodeUtils {
         String DisasterTypeSub=str.substring(31,33);
         String CategorySub=str.substring(33,36);
         Map<String,String> res=new HashMap<>();
-
         _A("SourceCode",Source,SourceSub,res,"SourceType","SourceSub");
         res.put("LoaderType",decode.getJSONObject("loaderCode").getString(loaderType));
         _A("DisasterCode",DisasterType,DisasterTypeSub,res,"DisasterType","DisasterSub");
         _A("DisasterCategory",DisasterType,CategorySub,res,"CategoryType","CategorySub");
-
+        res.put("Time",Time);
+        AddressCode address = addressCodeService.getAddress(Position);
+        res.put("省",address.getCity());
+        res.put("市",address.getCounty());
+        res.put("镇",address.getTown());
+        res.put("村",address.getVillage());
         return res;
     }
 }
