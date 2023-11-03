@@ -1,5 +1,6 @@
 package com.bupt.mshd2_0boot;
 
+import com.bupt.mshd2_0boot.service.AddressCodeService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.GaoDeAPI;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,12 @@ class ApplicationTests {
     @Autowired
     EncodeUtils util;
 
+    private final AddressCodeService addressCodeService;
+
+    @Autowired
+    public ApplicationTests(AddressCodeService addressCodeService) {
+        this.addressCodeService = addressCodeService;
+    }
 
     @Test
     void decodeTest() {
@@ -44,6 +51,7 @@ class ApplicationTests {
     void getAddressCodeTest() {
         System.out.println(GaoDeAPI.getAddressCode("海淀"));
         System.out.println(GaoDeAPI.getAddressCode("楚雄"));
+        System.out.println(GaoDeAPI.getAddressCode("东城区"));
         // System.out.println(GaoDeAPI.getAddressCode("哇奥")); //错误检测
     }
 
@@ -51,6 +59,24 @@ class ApplicationTests {
     void getAddressTest() {
         System.out.println(GaoDeAPI.getAddress("110108"));
         System.out.println(GaoDeAPI.getAddress("532300"));
+        System.out.println(GaoDeAPI.getAddress("110101"));
         // System.out.println(GaoDeAPI.getAddress("1231312312312")); //错误检测
+    }
+
+    @Test
+    void getDbAddressCodeTest() {
+        System.out.println(addressCodeService.getCode("asd", "asd", "asd", "", "laal"));
+        System.out.println(addressCodeService.getCode("山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会"));
+        System.out.println(addressCodeService.getCode("山东省", "济南市", "商河县", "龙桑寺镇", "张佑村"));
+        System.out.println(addressCodeService.getCode("四川省", "成都市", "简阳市", "赤水街道", "万家坝社区居民委员会"));
+    }
+
+    @Test
+    void getDbAddressTest() {
+        System.out.println(addressCodeService.getAddress(""));
+        System.out.println(addressCodeService.getAddress("123"));
+        System.out.println(addressCodeService.getAddress("540224207204"));
+        System.out.println(addressCodeService.getAddress("540224207207"));
+        System.out.println(addressCodeService.getAddress("54022420720"));
     }
 }
