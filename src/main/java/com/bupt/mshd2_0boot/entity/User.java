@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
+
 @Data
 @TableName("user")
 @Schema(description = "用户信息")
@@ -56,4 +57,6 @@ public class User {
     @TableField("privilege")
     @Schema(description = "权限")
     private Integer privilege;
+
+
 }

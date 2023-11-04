@@ -121,14 +121,20 @@ public class EncodeUtils {
 
         }
         String Code = "";
-        String Time=data.get("Time");
-        String address = this.addressCodeService.getCode(data.get("province"), data.get("city"), data.get("county"), data.get("town"), data.get("village"));
-        Code+=address;
-        Code+=Time;
-        Code+= _T(data,"SourceCode","SourceType","SourceSub");
-        Code+= this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
-        Code+= _T(data,"DisasterCode","DisasterType","DisasterSub");
-        Code+= _T(data,"DisasterCategory","DisasterType","CategorySub");
+        try {
+            String Time = data.get("Time");
+            String address = this.addressCodeService.getCode(data.get("province"), data.get("city"), data.get("county"), data.get("town"), data.get("village"));
+            Code += address;
+            Code += Time;
+            Code += _T(data, "SourceCode", "SourceType", "SourceSub");
+            Code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
+            Code += _T(data, "DisasterCode", "DisasterType", "DisasterSub");
+            Code += _T(data, "DisasterCategory", "DisasterType", "CategorySub");
+        }catch(NullPointerException e){
+            log.error("传入信息错误!");
+            return null;
+        }
+
         if(Code.contains("null")){
             log.error(Code);
             return null;
