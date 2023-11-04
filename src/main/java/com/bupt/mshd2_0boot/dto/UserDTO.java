@@ -13,4 +13,6 @@ public class UserDTO {
     private String username;
 
     private String icon;
+
+    private String phone;
 }

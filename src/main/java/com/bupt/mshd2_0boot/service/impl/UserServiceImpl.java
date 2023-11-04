@@ -111,4 +111,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return Result.ok();
     }
+
+    @Override
+    public Result logout(String phone, String token) {
+        // 检验手机号和token
+        if (Tools.isPhoneInvalid(phone)) {
+            return Result.fail("手机号格式错误!");
+        }
+        if (StrUtil.isBlank(token)) {
+            return Result.fail("token为空!");
+        }
+
+        // 检验是否有用户
+        Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(LOGIN_USER_KEY + token);
+        if (userMap.isEmpty()) {
+            return Result.fail("用户token不存在!");
+        }
+
+        // 获取用户信息
+        UserDTO userDTO = BeanUtil.fillBeanWithMap(userMap, new UserDTO(), false);
+
+        // 核验电话号码
+        if (!userDTO.getPhone().equals(phone)) {
+            return Result.fail("电话号码错误");
+        }
+
+        // 删除redis中的token
+        stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.ok();
+    }
 }

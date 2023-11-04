@@ -46,4 +46,11 @@ public class UserController {
     public Result delete(@RequestParam(name = "phone") String phone, @RequestParam(name = "password") String password) {
         return userService.delete(phone, password);
     }
+
+    @GetMapping("/logout")
+    @Operation(summary = "登出")
+    @Parameters({@Parameter(name = "phone", description = "电话号码"), @Parameter(name = "token", description = "token码")})
+    public Result logout(@RequestParam(name = "phone") String phone, @RequestParam(name = "token") String token) {
+        return userService.logout(phone, token);
+    }
 }

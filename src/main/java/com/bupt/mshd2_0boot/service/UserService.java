@@ -32,4 +32,12 @@ public interface UserService extends IService<User> {
      * @return 注销结果
      */
     Result delete(String phone, String password);
+
+    /**
+     * 登出接口
+     * @param phone 电话号码
+     * @param token token码
+     * @return 登出结果
+     */
+    Result logout(String phone, String token);
 }
