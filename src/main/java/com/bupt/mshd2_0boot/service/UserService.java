@@ -6,7 +6,7 @@ import com.bupt.mshd2_0boot.utils.Result;
 
 public interface UserService extends IService<User> {
     /**
-     * 登录接口，查询数据库中是否有对应的用户电话号码和密码
+     * 登录接口
      *
      * @param phone    电话号码
      * @param password 密码
@@ -35,9 +35,19 @@ public interface UserService extends IService<User> {
 
     /**
      * 登出接口
+     *
      * @param phone 电话号码
      * @param token token码
      * @return 登出结果
      */
     Result logout(String phone, String token);
+
+    /**
+     * 编辑用户信息
+     *
+     * @param user  修改后的用户信息
+     * @param token token码
+     * @return 修改结果
+     */
+    Result edit(User user, String token);
 }

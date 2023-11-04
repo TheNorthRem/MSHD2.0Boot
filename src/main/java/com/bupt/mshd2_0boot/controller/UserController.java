@@ -1,6 +1,7 @@
 package com.bupt.mshd2_0boot.controller;
 
 
+import com.bupt.mshd2_0boot.entity.User;
 import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,5 +53,12 @@ public class UserController {
     @Parameters({@Parameter(name = "phone", description = "电话号码"), @Parameter(name = "token", description = "token码")})
     public Result logout(@RequestParam(name = "phone") String phone, @RequestParam(name = "token") String token) {
         return userService.logout(phone, token);
+    }
+
+    @PostMapping("/edit")
+    @Operation(summary = "编辑用户信息")
+    @Parameters({@Parameter(name = "user", description = "编辑后的用户信息(手机号和createTime必须为null!)"), @Parameter(name = "token", description = "token码")})
+    public Result edit(@RequestBody User user, @RequestParam(name = "token") String token) {
+        return userService.edit(user, token);
     }
 }

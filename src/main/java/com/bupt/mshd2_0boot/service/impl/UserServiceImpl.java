@@ -15,6 +15,7 @@ import com.bupt.mshd2_0boot.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -92,9 +93,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result delete(String phone, String password) {
+        // 校验手机号
         if (Tools.isPhoneInvalid(phone)) {
             return Result.fail("手机号格式错误!");
         }
+
+        // 查询数据库中是否有对应数据
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("phone", phone);
         User user = this.getOne(queryWrapper);
@@ -104,6 +108,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!user.getPassword().equals(password)) {
             return Result.fail("密码错误!");
         }
+
+        // 删除用户信息
         boolean result = this.remove(queryWrapper);
         if (!result) {
             log.error("数据库删除数据失败!");
@@ -138,6 +144,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 删除redis中的token
         stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.ok();
+    }
+
+    @Override
+    @Transactional
+    public Result edit(User user, String token) {
+        if (user == null) {
+            return Result.fail("用户信息不能为空");
+        }
+
+        // 校验手机号,创建时间和token码
+        if (user.getPhone() != null || user.getCreateTime() != null) {
+            return Result.fail("不能修改手机号和创建时间!");
+        }
+
+        if (StrUtil.isBlank(token)) {
+            return Result.fail("token为空!");
+        }
+        // 更新修改时间
+        user.setUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
+
+        // 更新redis
+        // User脱敏转换为Map
+        Map<String, Object> userMap = BeanUtil.beanToMap(BeanUtil.copyProperties(user, UserDTO.class), new HashMap<>(), CopyOptions.create()
+                .setIgnoreNullValue(true)
+                .setFieldValueEditor((fieldName, fieldValue) -> fieldValue == null ? null : fieldValue.toString())); //这里面的key和value都要是String结构来保证StringRedis这个东西能够顺利存储
+        // 不修改手机号和id
+        userMap.remove("phone");
+        userMap.remove("id");
+
+        // Hash存储 设置有效值
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
+
+        // 更新数据库
+        this.updateById(user);
         return Result.ok();
     }
 }
