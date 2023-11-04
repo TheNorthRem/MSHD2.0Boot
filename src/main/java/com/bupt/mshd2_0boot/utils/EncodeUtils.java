@@ -97,25 +97,23 @@ public class EncodeUtils {
 
 
     /**
-     *SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategoryType","CategorySub"
-     * 参考Code.json
-     * 每个分类由主码和子码构成
-     * Map中的所有传值都必须以键值对的形式
-     * Key 对应 上面的
-     * Value 必须和JSON 文件中的值一致
-     * Type 指的是 主类信息
-     * Sub 指的是子类信息
+     *SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategorySub"
      * province  省
      * city 市
      * county 县
      * town  镇
      * village 乡
      * Time
+     * 参考Code.json
+     * 每个分类由主码和子码构成
+     * Map中的所有传值都必须以键值对的形式
+     * Key 对应 上面的
+     * Value 必须和JSON 文件中的值一致
      * 示例见 ApplicationTest 中的 EncodeTest方法
      */
 
     public  String Encodes(Map<String,String> data){
-        for(String it:this.keywords){
+        for(String it:EncodeUtils.keywords){
             if(!data.containsKey(it)){
                 log.error("-------Encodes Parameters missing-----"+it);
                 return null;
@@ -130,7 +128,11 @@ public class EncodeUtils {
         Code+= _T(data,"SourceCode","SourceType","SourceSub");
         Code+= this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
         Code+= _T(data,"DisasterCode","DisasterType","DisasterSub");
-        Code+= _T(data,"DisasterCategory","CategoryType","CategorySub");
+        Code+= _T(data,"DisasterCategory","DisasterType","CategorySub");
+        if(Code.contains("null")){
+            log.error(Code);
+            return null;
+        }
         return Code ;
     }
 
@@ -164,8 +166,23 @@ public class EncodeUtils {
 
     private String _T(Map<String,String> data,String Main,String Sub,String SubType){
         String Code="";
-        JSONObject  SourceType = this.encode.getJSONObject(Main).getJSONObject(data.get(Sub));
-        if(Main.equals("DisasterCategory"))
+        String SubData=data.get(Sub);
+        if(Main.equals("DisasterCategory")){
+            if(SubData.equals("震情")){
+                SubData="地震事件信息";
+            }else{
+                SubData+="信息";
+            }
+        }
+        //370126104213202109212031422002202001
+        JSONObject  SourceType = this.encode.getJSONObject(Main).getJSONObject(SubData);
+        if(SourceType==null){
+            log.error("-----_T ----error------");
+            log.error(Main+"-----"+Sub+"---------"+SubType+"---------");
+            log.error(data.get(Sub)+"---------"+data.get(SubType));
+            return null;
+        }
+        if(!Main.equals("DisasterCategory"))
             Code+=SourceType.getString("code");
         Code+=SourceType.getJSONObject("subCode").getString(data.get(SubType));
         return Code;
@@ -198,8 +215,8 @@ public class EncodeUtils {
         return res;
     }
 
-    private final String[] keywords={
-      "SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategoryType","CategorySub","province","city","county"
-            ,"town","village"
+    public static final String[] keywords={
+      "SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategorySub","province","city","county"
+            ,"town","village","Time"
     };
 }

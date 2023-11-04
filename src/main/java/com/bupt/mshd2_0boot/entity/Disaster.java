@@ -4,16 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @TableName("disaster")
 @Schema(description = "灾情数据")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Disaster {
     @TableId(type = IdType.AUTO)
     @Schema(description = "主键")
@@ -29,5 +33,22 @@ public class Disaster {
 
     @TableField("file_path")
     @Schema(description = "载体路径")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private String filePath;
+
+    @TableField("upload_time")
+    @Schema(description = "上传时间")
+    private Timestamp uploadTime;
+
+    @TableField("update_time")
+    @Schema(description = "更新时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp updateTime;
+
+    public Disaster(){
+        this.setUploadTime(Timestamp.valueOf(LocalDateTime.now()));
+        this.setUpdateTime(this.getUploadTime());
+    }
 }

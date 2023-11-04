@@ -23,7 +23,8 @@ class ApplicationTests {
 
     @Test
     void decodeTest() {
-        Map<String, String> decodes = util.decodes("632626200206202105220204001010302001");
+        //37012610421320210921203142002002202001
+        Map<String, String> decodes = util.decodes("370126104213202109212031422002202001");
         System.out.println(decodes);
 
     }
@@ -33,8 +34,8 @@ class ApplicationTests {
     void EncodeTest() {
         Map<String, String> m = new HashMap<>();
 
-        String[] key = {"SourceType", "SourceSub", "LoaderType", "DisasterType", "DisasterSub", "CategoryType", "CategorySub", "province", "city", "county", "town", "village", "Time"};
-        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "人员伤亡及失踪信息", "受灾人数", "山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会", "2021092120314200"};
+        String[] key = {"SourceType", "SourceSub", "LoaderType", "DisasterType", "DisasterSub", "CategorySub", "province", "city", "county", "town", "village", "Time"};
+        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "受灾人数", "山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会", "20210921203142"};
 
         for (int i = 0; i < key.length; i++) {
             m.put(key[i], value[i]);
