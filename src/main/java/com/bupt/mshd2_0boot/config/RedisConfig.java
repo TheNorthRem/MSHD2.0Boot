@@ -18,6 +18,7 @@ public class RedisConfig {
         // 配置
         Config config = new Config();
         config.useSingleServer().setAddress("redis://" + EnvironmentValue.getParamSettings("spring.data.redis.host") + ":" + EnvironmentValue.getParamSettings("spring.data.redis.port"));
+        config.useSingleServer().setPassword(EnvironmentValue.getParamSettings("spring.data.redis.password"));
         // 创建RedissonClient对象
         return Redisson.create(config);
     }

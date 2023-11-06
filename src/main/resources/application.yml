@@ -7,7 +7,7 @@ spring:
   data:
     redis:
       database: 0
-      host: 127.0.0.1
+      host: 82.157.75.213
       lettuce:
         pool:
           max-active: -1
@@ -16,6 +16,7 @@ spring:
           min-idle: 0
         shutdown-timeout: 100ms
       port: 6379
+      password: yy123456!
   servlet:
     multipart:
       max-file-size: 100MB
