@@ -35,18 +35,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public Result login(String phone, String password) {
+    public Result login(String phone, String password, Integer privilege) {
         // 验证手机号格式
         if (Tools.isPhoneInvalid(phone)) {
             return Result.fail("手机号格式错误!");
         }
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone);
+        // 查询对应的电话号码和权限 select ... where phone = $phone and privilege = $privilege;
+        queryWrapper.eq("phone", phone)
+                .eq("privilege", privilege);
         long count = this.count(queryWrapper);
         // 未在数据库查询到用户信息
         if (count == 0) {
-            return Result.fail("用户不存在!");
+            return Result.fail("用户不存在或权限错误!");
         }
         // 因为phone是唯一健，所以查询的时候只会有一条数据
         User user = this.getOne(queryWrapper);
@@ -84,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (count != 0) {
             return Result.fail("用户名已经被注册!");
         }
-
+        //privilege为0.默认是普通用户
         User user = new User(null, userName, password, phone, "", Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), 0);
         // 注册账号
         this.save(user);

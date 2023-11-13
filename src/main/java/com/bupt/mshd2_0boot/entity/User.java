@@ -57,6 +57,4 @@ public class User {
     @TableField("privilege")
     @Schema(description = "权限")
     private Integer privilege;
-
-
 }

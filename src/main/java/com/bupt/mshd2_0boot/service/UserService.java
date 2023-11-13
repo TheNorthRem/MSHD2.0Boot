@@ -10,9 +10,10 @@ public interface UserService extends IService<User> {
      *
      * @param phone    电话号码
      * @param password 密码
+     * @param privilege 权限(1:管理员,0:普通用户)
      * @return 登录结果
      */
-    Result login(String phone, String password);
+    Result login(String phone, String password, Integer privilege);
 
     /**
      * 注册接口
