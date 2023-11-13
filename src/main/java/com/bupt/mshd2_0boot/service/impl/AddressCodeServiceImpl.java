@@ -7,11 +7,22 @@ import com.bupt.mshd2_0boot.entity.AddressCode;
 import com.bupt.mshd2_0boot.mapper.AddressCodeMapper;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
 public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, AddressCode> implements AddressCodeService {
+
+    private final AddressCodeMapper addressCodeMapper;
+
+    @Autowired
+    public AddressCodeServiceImpl(AddressCodeMapper addressCodeMapper){
+        this.addressCodeMapper=addressCodeMapper;
+    }
+
     @Override
     public String getCode(String province, String city, String county, String town, String village) {
         // 数据不合规直接报错
@@ -46,5 +57,29 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
         // 根据地区代码(主键)查询
         // 若查询不到则返回null，否则返回地区信息
         return this.getById(code);
+    }
+
+    public List<String> listProvince(){
+        return addressCodeMapper.listProvince();
+    }
+
+    @Override
+    public List<String> listCity(String Province) {
+        return addressCodeMapper.getCityByProvince(Province);
+    }
+
+    @Override
+    public List<String> listCounty(String Province, String City) {
+        return addressCodeMapper.getCountyByProvinceAndCity(Province,City);
+    }
+
+    @Override
+    public List<String> listTown(String Province, String City, String County) {
+        return addressCodeMapper.getTownByProvinceAndCityAndCounty(Province, City, County);
+    }
+
+    @Override
+    public List<String> listVillage(String Province, String City, String County, String Town) {
+        return addressCodeMapper.getVillageByPCCT(Province, City, County, Town);
     }
 }

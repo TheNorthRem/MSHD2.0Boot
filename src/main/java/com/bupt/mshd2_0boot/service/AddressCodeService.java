@@ -3,6 +3,8 @@ package com.bupt.mshd2_0boot.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bupt.mshd2_0boot.entity.AddressCode;
 
+import java.util.List;
+
 public interface AddressCodeService extends IService<AddressCode> {
     /**
      * 根据地区地理信息来获取地区编码
@@ -23,4 +25,13 @@ public interface AddressCodeService extends IService<AddressCode> {
      * @return 地区值，以实体类的模式返回/错误时返回null
      */
     AddressCode getAddress(String code);
+
+    List<String> listProvince();
+    List<String> listCity(String Province);
+
+    List<String> listCounty(String Province,String City);
+
+    List<String> listTown(String Province,String City,String County);
+
+    List<String> listVillage(String Province,String City,String County,String Town );
 }
