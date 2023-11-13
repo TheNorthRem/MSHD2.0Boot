@@ -15,4 +15,6 @@ public class UserDTO {
     private String icon;
 
     private String phone;
+
+    private Integer privilege;
 }
