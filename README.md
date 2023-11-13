@@ -1,1 +1,2 @@
 - 运行|打包时记得开下`redis`家人们
+- [测试地址](http://localhost:8077/swagger-ui/index.html)
