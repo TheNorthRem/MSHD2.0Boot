@@ -107,11 +107,11 @@ public class EncodeUtils {
         _A("DisasterCategory",code.get("DisasterType"),code.get("CategorySub"),res,"CategoryType","CategorySub");
         res.put("Time",code.get("Time"));
         AddressCode address = addressCodeService.getAddress(code.get("Position"));
-        res.put("省",address.getProvince());
-        res.put("市",address.getCity());
-        res.put("县",address.getCounty());
-        res.put("镇",address.getTown());
-        res.put("村",address.getVillage());
+        res.put("province",address.getProvince());
+        res.put("city",address.getCity());
+        res.put("county",address.getCounty());
+        res.put("town",address.getTown());
+        res.put("village",address.getVillage());
         return res;
     }
 

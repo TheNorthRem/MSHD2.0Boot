@@ -47,6 +47,9 @@ public class DisasterController {
                 continue;
             }
             decodes.put("description",disaster.getDescription());
+            decodes.put("uploadTime",disaster.getUploadTime().toString());
+            decodes.put("updateTime",disaster.getUpdateTime().toString());
+            decodes.put("uploader",userService.getById(disaster.getId()).toString());
             res.add(decodes);
         }
         return Result.ok(res);

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Tools {
+
+
     /**
      * 检查账号长度是否在6-16之间
      * 检查密码长度是否在6-18之间
