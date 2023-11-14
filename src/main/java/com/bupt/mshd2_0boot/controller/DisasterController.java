@@ -49,7 +49,7 @@ public class DisasterController {
             decodes.put("description",disaster.getDescription());
             decodes.put("uploadTime",disaster.getUploadTime().toString());
             decodes.put("updateTime",disaster.getUpdateTime().toString());
-            decodes.put("uploader",userService.getById(disaster.getId()).toString());
+            decodes.put("uploader",userService.getById(disaster.getUploader()).toString());
             res.add(decodes);
         }
         return Result.ok(res);
@@ -101,4 +101,9 @@ public class DisasterController {
         return Result.fail("删除失败");
     }
 
+    @GetMapping("/getDisasterCount")
+    @Operation(summary = "获取灾情地域统计信息")
+    public Result getDisasterCount(){
+        return Result.ok(disasterService.getDisasterCount());
+    }
 }
