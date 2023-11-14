@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 public class DisasterCount {
     @TableId(value = "id", type = IdType.INPUT)
     @Schema(description = "主键:地区代码")
-    private String id;
+    private String id;//6位代码 对应一个行政区
 
     @TableField("count")
     @Schema(description = "地区灾情数量")
-    private Integer count;
+    private Integer count; //代码所对应的行政区灾情数量
 
 }
