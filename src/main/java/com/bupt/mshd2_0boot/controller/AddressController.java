@@ -63,6 +63,6 @@ public class AddressController {
             @Parameter(name = "county", description = "县/区"),
             @Parameter(name = "town", description = "镇/街道")})
     public Result ListVillage(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county, @RequestParam(name = "town") String town) {
-        return Result.ok(addressCodeService.listVillage(province, city, county, town));
+        return addressCodeService.listVillage(province, city, county, town);
     }
 }
