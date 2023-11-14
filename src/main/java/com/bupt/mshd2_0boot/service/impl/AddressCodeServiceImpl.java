@@ -23,7 +23,7 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
 
     private final static String VUE3_KEY = "value"; // 前端需要的key值
 
-    private final Function<String, JSONObject> VUE3_PACKAGE = (value) -> { // 前端封装需要的函数
+    private final static Function<String, JSONObject> VUE3_PACKAGE = (value) -> { // 前端封装需要的函数
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(VUE3_KEY, value);
         return jsonObject;
