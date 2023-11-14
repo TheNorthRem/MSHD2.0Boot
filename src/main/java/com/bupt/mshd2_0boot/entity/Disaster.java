@@ -39,11 +39,13 @@ public class Disaster {
 
     @TableField("upload_time")
     @Schema(description = "上传时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp uploadTime;
 
     @TableField("uploader")
     @Schema(description = "上传者")
-    private Timestamp uploader;
+    private Integer uploader;
 
     @TableField("update_time")
     @Schema(description = "更新时间")
