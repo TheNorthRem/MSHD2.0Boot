@@ -2,7 +2,9 @@ package com.bupt.mshd2_0boot.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.bupt.mshd2_0boot.entity.Disaster;
+import com.bupt.mshd2_0boot.entity.DisasterCount;
 import com.bupt.mshd2_0boot.entity.User;
+import com.bupt.mshd2_0boot.service.DisasterCountService;
 import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
@@ -30,11 +32,14 @@ public class DisasterController {
     private final EncodeUtils encodeUtils;
 
     private final UserService userService;
+
+    private final DisasterCountService disasterCountService;
     @Autowired
-    public DisasterController(DisasterService disasterService,EncodeUtils encodeUtils,UserService userService){
+    public DisasterController(DisasterService disasterService,EncodeUtils encodeUtils,UserService userService,DisasterCountService disasterCountService){
         this.disasterService=disasterService;
         this.encodeUtils=encodeUtils;
         this.userService=userService;
+        this.disasterCountService=disasterCountService;
     }
     @GetMapping("/ListDisasters")
     @Operation(summary = "查询所有的灾情信息")
@@ -62,7 +67,7 @@ public class DisasterController {
     ,@Parameter(name="SourceType",description = "来源大类"),@Parameter(name = "SourceSub",description = "来源子类")
     ,@Parameter(name="LoaderType",description = "载体形式"),@Parameter(name = "DisasterType",description = "灾情分类")
     ,@Parameter(name="DisasterSub",description = "灾情子类"),@Parameter(name = "CategorySub",description = "灾情指标")
-    ,@Parameter(name = "description",description = "描述"),@Parameter(name="Time",description = "时间")})
+    ,@Parameter(name = "description",description = "描述"),@Parameter(name="Time",description = "时间"),@Parameter(name="uploader",description = "上传者Id")})
     public Result AddDisasterData(@RequestBody JSONObject data){
         Map<String,String> dataMap=new HashMap<>();
         for(String keyword:EncodeUtils.keywords){
@@ -80,7 +85,20 @@ public class DisasterController {
         Disaster disaster=new Disaster();
         disaster.setId(encodes);
         disaster.setDescription(data.getString("description"));
+        disaster.setUploader(data.getInteger("uploader"));
         disasterService.save(disaster);
+        String addressCode = encodes.substring(0,5)+"0";
+        DisasterCount cnt = disasterCountService.getById(addressCode);
+
+        if(cnt==null){
+            DisasterCount disasterCount=new DisasterCount();
+            disasterCount.setId(addressCode);
+            disasterCount.setCount(1);
+            disasterCountService.save(disasterCount);
+        }else{
+            cnt.setCount(cnt.getCount()+1);
+            disasterCountService.updateById(cnt);
+        }
         return Result.ok("添加成功");
     }
 
@@ -95,7 +113,14 @@ public class DisasterController {
 
         if(user.getPrivilege()==0) return Result.fail("无权限");
 
+        Disaster disaster = disasterService.getById(Id);
+
+        String addressCode=disaster.getId().substring(0,5)+"0";
+
         if(disasterService.removeById(Id)){
+            DisasterCount cnt = disasterCountService.getById(addressCode);
+            cnt.setCount(cnt.getCount()-1);
+            disasterCountService.updateById(cnt);
             return Result.ok("删除成功");
         }
         return Result.fail("删除失败");
@@ -104,6 +129,6 @@ public class DisasterController {
     @GetMapping("/getDisasterCount")
     @Operation(summary = "获取灾情地域统计信息")
     public Result getDisasterCount(){
-        return Result.ok(disasterService.getDisasterCount());
+        return Result.ok(disasterCountService.list());
     }
 }
