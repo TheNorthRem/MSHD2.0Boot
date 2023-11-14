@@ -7,6 +7,10 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface AddressCodeMapper extends BaseMapper<AddressCode> {
+
+    @Select("select distinct city from addressCode where province=#{Province}")
+    List<String> getCityByProvince(String Province);
+
     @Select("select distinct county from addressCode where province=#{Province} and city=#{City}")
     List<String> getCountyByProvinceAndCity(String Province, String City);
 

@@ -14,14 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 @Service
 @Slf4j
 public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, AddressCode> implements AddressCodeService {
 
     private final static String VUE3_KEY = "value"; // 前端需要的key值
+
+    private final Function<String, JSONObject> VUE3_PACKAGE = (value) -> { // 前端封装需要的函数
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(VUE3_KEY, value);
+        return jsonObject;
+    };
 
     private final AddressCodeMapper addressCodeMapper;
 
@@ -75,42 +81,58 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
         // JSONObject value形式,方便前端绑定
         return Result.ok(Objects.requireNonNull(stringRedisTemplate.opsForSet().members(RedisConstants.provinces))
                 .stream()
-                .map((x) -> {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put(VUE3_KEY, x);
-                    return jsonObject;
-                }));
+                .map(VUE3_PACKAGE));
     }
 
     @Override
     public Result listCity(String Province) {
-        if (StrUtil.isBlank(Province) || !this.isProvince(Province)) {
+        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
             return Result.fail("该省份不合法!");
         }
-        return Result.ok();
+        return Result.ok(addressCodeMapper.getCityByProvince(Province)
+                .stream()
+                .map(VUE3_PACKAGE));
     }
 
     @Override
     public Result listCounty(String Province, String City) {
-        return null;
+        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+            return Result.fail("该省份不合法!");
+        }
+
+        return Result.ok(addressCodeMapper.getCountyByProvinceAndCity(Province, City)
+                .stream()
+                .map(VUE3_PACKAGE));
     }
 
     @Override
     public Result listTown(String Province, String City, String County) {
-        return null;
+        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+            return Result.fail("该省份不合法!");
+        }
+
+        return Result.ok(addressCodeMapper.getTownByProvinceAndCityAndCounty(Province, City, County)
+                .stream()
+                .map(VUE3_PACKAGE));
     }
 
     @Override
     public Result listVillage(String Province, String City, String County, String Town) {
-        return null;
+        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+            return Result.fail("该省份不合法!");
+        }
+
+        return Result.ok(addressCodeMapper.getVillageByPCCT(Province, City, County, Town)
+                .stream()
+                .map(VUE3_PACKAGE));
     }
 
     /**
      * @param province 查询省份
-     * @return 返回该省份是否是一个合法省份
+     * @return 返回该省份是否不是一个合法省份
      */
-    private boolean isProvince(String province) {
+    private boolean isNotProvince(String province) {
         //Redis中的set查找即可
-        return Boolean.TRUE.equals(stringRedisTemplate.opsForSet().isMember(RedisConstants.provinces, province));
+        return !Boolean.TRUE.equals(stringRedisTemplate.opsForSet().isMember(RedisConstants.provinces, province));
     }
 }
