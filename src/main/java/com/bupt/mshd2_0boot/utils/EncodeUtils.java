@@ -4,13 +4,14 @@ import com.alibaba.fastjson2.JSONObject;
 import com.bupt.mshd2_0boot.entity.AddressCode;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -209,17 +210,24 @@ public class EncodeUtils {
     private void parseCode() {
         //获取编码配置文件
         Resource resource = resourceLoader.getResource("classpath:Code.json");
-        File file;
-        String str=null;
+
+        StringBuilder str= new StringBuilder();
+
         try {
-            file = resource.getFile();
-            str=FileUtils.readFileToString(file, "UTF-8");
+            Reader reader=new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
+            char[] buffer = new char[1024];
+            int len;
+            while ((len = reader.read(buffer)) != -1) {
+                String content = new String(buffer, 0, len);
+                str.append(content);
+            }
+            reader.close();
         }catch (IOException e){
             System.err.println("ERROR !! ---------编码初始化失败----------");
         }
 
         JSONObject res=new JSONObject();
-        JSONObject data=JSONObject.parseObject(str);
+        JSONObject data=JSONObject.parseObject(str.toString());
         this.encode=data;
 
         if(data==null){
