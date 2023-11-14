@@ -85,44 +85,44 @@ public class AddressCodeServiceImpl extends ServiceImpl<AddressCodeMapper, Addre
     }
 
     @Override
-    public Result listCity(String Province) {
-        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+    public Result listCity(String province) {
+        if (StrUtil.isBlank(province) || this.isNotProvince(province)) {
             return Result.fail("该省份不合法!");
         }
-        return Result.ok(addressCodeMapper.getCityByProvince(Province)
+        return Result.ok(addressCodeMapper.getCityByProvince(province)
                 .stream()
                 .map(VUE3_PACKAGE));
     }
 
     @Override
-    public Result listCounty(String Province, String City) {
-        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+    public Result listCounty(String province, String city) {
+        if (StrUtil.isBlank(province) || this.isNotProvince(province)) {
             return Result.fail("该省份不合法!");
         }
 
-        return Result.ok(addressCodeMapper.getCountyByProvinceAndCity(Province, City)
+        return Result.ok(addressCodeMapper.getCountyByProvinceAndCity(province, city)
                 .stream()
                 .map(VUE3_PACKAGE));
     }
 
     @Override
-    public Result listTown(String Province, String City, String County) {
-        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+    public Result listTown(String province, String city, String county) {
+        if (StrUtil.isBlank(province) || this.isNotProvince(province)) {
             return Result.fail("该省份不合法!");
         }
 
-        return Result.ok(addressCodeMapper.getTownByProvinceAndCityAndCounty(Province, City, County)
+        return Result.ok(addressCodeMapper.getTownByProvinceAndCityAndCounty(province, city, county)
                 .stream()
                 .map(VUE3_PACKAGE));
     }
 
     @Override
-    public Result listVillage(String Province, String City, String County, String Town) {
-        if (StrUtil.isBlank(Province) || this.isNotProvince(Province)) {
+    public Result listVillage(String province, String city, String county, String town) {
+        if (StrUtil.isBlank(province) || this.isNotProvince(province)) {
             return Result.fail("该省份不合法!");
         }
 
-        return Result.ok(addressCodeMapper.getVillageByPCCT(Province, City, County, Town)
+        return Result.ok(addressCodeMapper.getVillageByPCCT(province, city, county, town)
                 .stream()
                 .map(VUE3_PACKAGE));
     }
