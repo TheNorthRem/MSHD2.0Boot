@@ -2,8 +2,7 @@ package com.bupt.mshd2_0boot.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bupt.mshd2_0boot.entity.AddressCode;
-
-import java.util.List;
+import com.bupt.mshd2_0boot.utils.Result;
 
 public interface AddressCodeService extends IService<AddressCode> {
     /**
@@ -26,12 +25,17 @@ public interface AddressCodeService extends IService<AddressCode> {
      */
     AddressCode getAddress(String code);
 
-    List<String> listProvince();
-    List<String> listCity(String Province);
+    /**
+     * 获取所有的省份(本数据为常见数据，使用Redis来提高响应速度，同时降低数据库压力)
+     * @return 所有省份的列表
+     */
+    Result listProvince();
 
-    List<String> listCounty(String Province,String City);
+    Result listCity(String Province);
 
-    List<String> listTown(String Province,String City,String County);
+    Result listCounty(String Province, String City);
 
-    List<String> listVillage(String Province,String City,String County,String Town );
+    Result listTown(String Province, String City, String County);
+
+    Result listVillage(String Province, String City, String County, String Town);
 }
