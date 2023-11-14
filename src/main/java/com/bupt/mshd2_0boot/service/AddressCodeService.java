@@ -31,11 +31,11 @@ public interface AddressCodeService extends IService<AddressCode> {
      */
     Result listProvince();
 
-    Result listCity(String Province);
+    Result listCity(String province);
 
-    Result listCounty(String Province, String City);
+    Result listCounty(String province, String city);
 
-    Result listTown(String Province, String City, String County);
+    Result listTown(String province, String city, String county);
 
-    Result listVillage(String Province, String City, String County, String Town);
+    Result listVillage(String province, String city, String county, String town);
 }
