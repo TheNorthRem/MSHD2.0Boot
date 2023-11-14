@@ -16,8 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,10 +42,10 @@ public class DisasterController {
     @GetMapping("/ListDisasters")
     @Operation(summary = "查询所有的灾情信息")
     public Result ListDisasters(){
-        List<Disaster> list = disasterService.list();
+        List<Disaster> list = disasterService.list(); //查询所有灾情
         List<Map<String,String>> res=new ArrayList<>();
         for(Disaster disaster: list){
-            Map<String, String> decodes = encodeUtils.decodes(disaster.getId());
+            Map<String, String> decodes = encodeUtils.decodes(disaster.getId()); //解码返回
             if(decodes==null){
                 continue;
             }
@@ -70,13 +68,14 @@ public class DisasterController {
     ,@Parameter(name = "description",description = "描述"),@Parameter(name="Time",description = "时间"),@Parameter(name="uploader",description = "上传者Id")})
     public Result AddDisasterData(@RequestBody JSONObject data){
         Map<String,String> dataMap=new HashMap<>();
+        //检测参数是否完整
         for(String keyword:EncodeUtils.keywords){
             String key = data.getString(keyword);
             if(key==null) return Result.fail("信息缺失"+keyword);
             dataMap.put(keyword,key);
         }
 
-        String encodes = encodeUtils.Encodes(dataMap);
+        String encodes = encodeUtils.Encodes(dataMap); //编码
 
         if(encodes==null){
             return Result.fail("信息有误");
@@ -84,13 +83,13 @@ public class DisasterController {
 
         Disaster disaster=new Disaster();
         disaster.setId(encodes);
-        disaster.setDescription(data.getString("description"));
+        disaster.setDescription(data.getString("description")); //补充描述信息
         disaster.setUploader(data.getInteger("uploader"));
         disasterService.save(disaster);
-        String addressCode = encodes.substring(0,5)+"0";
+        String addressCode = encodes.substring(0,5)+"0";//通过灾情码前5位提取行政区代码
         DisasterCount cnt = disasterCountService.getById(addressCode);
 
-        if(cnt==null){
+        if(cnt==null){ // 添加灾情时更新统计信息
             DisasterCount disasterCount=new DisasterCount();
             disasterCount.setId(addressCode);
             disasterCount.setCount(1);
@@ -106,18 +105,18 @@ public class DisasterController {
     @Operation(summary="删除灾情信息")
     @Parameters({@Parameter(name = "id",description = "灾害主键"),@Parameter(name="userId",description = "用户主键")})
     public Result deleteDisaster(@RequestParam Integer Id,@RequestParam Integer userId){
-        User user = userService.getById(userId);
+        User user = userService.getById(userId); //获取用户
         if(user==null){
             return Result.fail("用户不存在");
         }
 
-        if(user.getPrivilege()==0) return Result.fail("无权限");
+        if(user.getPrivilege()==0) return Result.fail("无权限"); //检测权限
 
         Disaster disaster = disasterService.getById(Id);
 
-        String addressCode=disaster.getId().substring(0,5)+"0";
+        String addressCode=disaster.getId().substring(0,5)+"0"; //通过灾情码前5位提取行政区代码
 
-        if(disasterService.removeById(Id)){
+        if(disasterService.removeById(Id)){//删除灾情时更新统计信息
             DisasterCount cnt = disasterCountService.getById(addressCode);
             cnt.setCount(cnt.getCount()-1);
             disasterCountService.updateById(cnt);
