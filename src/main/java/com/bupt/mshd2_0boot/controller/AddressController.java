@@ -22,42 +22,41 @@ public class AddressController {
     private final AddressCodeService addressCodeService;
 
     @Autowired
-    public AddressController(AddressCodeService addressCodeService){
-        this.addressCodeService=addressCodeService;
+    public AddressController(AddressCodeService addressCodeService) {
+        this.addressCodeService = addressCodeService;
     }
 
     @GetMapping("/ListProvince")
     @Operation(summary = "查询省份")
-    public Result ListProvince(){
-        return Result.ok(addressCodeService.listProvince());
+    public Result ListProvince() {
+        return addressCodeService.listProvince();
     }
 
     @GetMapping("/ListCity")
     @Operation(summary = "查询城市")
-    @Parameter(name = "Province",description = "省份名")
-    public Result ListCity(@RequestParam String Province){
-        return Result.ok(addressCodeService.listCity(Province));
+    @Parameter(name = "Province", description = "省份名")
+    public Result ListCity(@RequestParam String Province) {
+        return addressCodeService.listCity(Province);
     }
 
     @GetMapping("/ListCounty")
     @Operation(summary = "查询县/区")
-    @Parameters({@Parameter(name = "Province",description = "省份名"),@Parameter(name="City",description = "市")})
-    public Result ListCounty(@RequestParam String Province ,@RequestParam String City){
-        return Result.ok(addressCodeService.listCounty(Province,City));
+    @Parameters({@Parameter(name = "Province", description = "省份名"), @Parameter(name = "City", description = "市")})
+    public Result ListCounty(@RequestParam String Province, @RequestParam String City) {
+        return addressCodeService.listCounty(Province, City);
     }
 
     @GetMapping("/ListTown")
     @Operation(summary = "查询镇/街道")
-    @Parameters({@Parameter(name = "Province",description = "省份名"),@Parameter(name="City",description = "市"),@Parameter(name="County",description = "县/区")})
-    public Result ListCounty(@RequestParam String Province ,@RequestParam String City,@RequestParam String County){
-        return Result.ok(addressCodeService.listTown(Province,City,County));
+    @Parameters({@Parameter(name = "Province", description = "省份名"), @Parameter(name = "City", description = "市"), @Parameter(name = "County", description = "县/区")})
+    public Result ListCounty(@RequestParam String Province, @RequestParam String City, @RequestParam String County) {
+        return addressCodeService.listTown(Province, City, County);
     }
 
     @GetMapping("/ListVillage")
     @Operation(summary = "查询村/居委会")
-    @Parameters({@Parameter(name = "Province",description = "省份名"),@Parameter(name="City",description = "市"),@Parameter(name="County",description = "县/区"),@Parameter(name="Town",description = "镇/街道")})
-    public Result ListVillage(@RequestParam String Province ,@RequestParam String City,@RequestParam String County,@RequestParam String Town){
-        return Result.ok(addressCodeService.listVillage(Province,City,County,Town));
+    @Parameters({@Parameter(name = "Province", description = "省份名"), @Parameter(name = "City", description = "市"), @Parameter(name = "County", description = "县/区"), @Parameter(name = "Town", description = "镇/街道")})
+    public Result ListVillage(@RequestParam String Province, @RequestParam String City, @RequestParam String County, @RequestParam String Town) {
+        return Result.ok(addressCodeService.listVillage(Province, City, County, Town));
     }
-
 }

@@ -8,18 +8,15 @@ import java.util.List;
 
 public interface AddressCodeMapper extends BaseMapper<AddressCode> {
 
-    @Select("select distinct province from addressCode")
-     List<String> listProvince();
-
     @Select("select distinct city from addressCode where province=#{Province}")
-     List<String> getCityByProvince(String Province);
+    List<String> getCityByProvince(String Province);
 
     @Select("select distinct county from addressCode where province=#{Province} and city=#{City}")
-     List<String> getCountyByProvinceAndCity(String Province,String City);
+    List<String> getCountyByProvinceAndCity(String Province, String City);
 
     @Select("select distinct town from addressCode where province=#{Province} and city=#{City} and county=#{County}")
-     List<String> getTownByProvinceAndCityAndCounty(String Province,String City,String County);
+    List<String> getTownByProvinceAndCityAndCounty(String Province, String City, String County);
 
     @Select("select distinct village from addressCode where province=#{Province} and city=#{City} and county=#{County} and town=#{Town}")
-     List<String> getVillageByPCCT(String Province,String City,String County,String Town);
+    List<String> getVillageByPCCT(String Province, String City, String County, String Town);
 }
