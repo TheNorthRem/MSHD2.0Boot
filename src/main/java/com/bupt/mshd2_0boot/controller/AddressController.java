@@ -26,20 +26,20 @@ public class AddressController {
         this.addressCodeService = addressCodeService;
     }
 
-    @GetMapping("/ListProvince")
+    @GetMapping("/listProvince")
     @Operation(summary = "查询省份")
     public Result ListProvince() {
         return addressCodeService.listProvince();
     }
 
-    @GetMapping("/ListCity")
+    @GetMapping("/listCity")
     @Operation(summary = "查询城市")
     @Parameter(name = "province", description = "省份名")
     public Result ListCity(@RequestParam(name = "province") String province) {
         return addressCodeService.listCity(province);
     }
 
-    @GetMapping("/ListCounty")
+    @GetMapping("/listCounty")
     @Operation(summary = "查询县/区")
     @Parameters({@Parameter(name = "province", description = "省份名"),
             @Parameter(name = "city", description = "市")})
@@ -47,7 +47,7 @@ public class AddressController {
         return addressCodeService.listCounty(province, city);
     }
 
-    @GetMapping("/ListTown")
+    @GetMapping("/listTown")
     @Operation(summary = "查询镇/街道")
     @Parameters({@Parameter(name = "province", description = "省份名"),
             @Parameter(name = "city", description = "市"),
@@ -56,7 +56,7 @@ public class AddressController {
         return addressCodeService.listTown(province, city, county);
     }
 
-    @GetMapping("/ListVillage")
+    @GetMapping("/listVillage")
     @Operation(summary = "查询村/居委会")
     @Parameters({@Parameter(name = "province", description = "省份名"),
             @Parameter(name = "city", description = "市"),

@@ -7,6 +7,8 @@ import com.bupt.mshd2_0boot.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +68,12 @@ public class UserController {
             @Parameter(name = "token", description = "token码")})
     public Result edit(@RequestBody User user, @RequestParam(name = "token") String token) {
         return userService.edit(user, token);
+    }
+
+    @GetMapping("/message")
+    @Operation(summary = "获取用户信息(未登录无法获取)", security = {@SecurityRequirement(name = "X-Token")})
+    @Parameter(name = "X-Token", in = ParameterIn.HEADER, description = "请求头")
+    public Result message() {
+        return userService.message();
     }
 }

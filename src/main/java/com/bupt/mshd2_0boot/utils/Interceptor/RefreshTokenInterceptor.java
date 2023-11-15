@@ -29,7 +29,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
         // 获取token
-        String token = request.getHeader("authorization");
+        String token = request.getHeader("X-Token");
         if (StrUtil.isBlank(token)) {   // 没有直接放行
             return true;
         }
@@ -43,7 +43,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 数据提取
+        // 数据提取(用户信息脱敏)
         UserDTO userDTO = BeanUtil.fillBeanWithMap(userMap, new UserDTO(), false);
         // 保存到ThreadLocal
         UserHolder.saveUser(userDTO);

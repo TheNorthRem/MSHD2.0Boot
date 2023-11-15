@@ -35,7 +35,7 @@ class ApplicationTests {
         Map<String, String> m = new HashMap<>();
 
         String[] key = {"SourceType", "SourceSub", "LoaderType", "DisasterType", "DisasterSub", "CategorySub", "province", "city", "county", "town", "village", "Time"};
-        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "受灾人数", "山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会", "20210921203142"};
+        String[] value = {"泛在感知数据", "互联网感知", "音频", "人员伤亡及失踪", "受伤", "受灾人数", "山东省", "济南市", "商河县", "龙桑寺镇", "张佑村委会", "2021-09-21 20:31:42"};
 
         for (int i = 0; i < key.length; i++) {
             m.put(key[i], value[i]);

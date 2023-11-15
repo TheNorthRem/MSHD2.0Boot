@@ -51,4 +51,10 @@ public interface UserService extends IService<User> {
      * @return 修改结果
      */
     Result edit(User user, String token);
+
+    /**
+     *
+     * @return 当前用户脱敏信息/未登录返回报错
+     */
+    Result message();
 }

@@ -62,14 +62,21 @@ public class EncodeUtils {
         }
         String Code = "";
         try {
-            String Time = data.get("Time");
-            if(Time.length()!=14){
+            String time = data.get("Time");
+
+            //格式转换 YYYY-MM-DD hh:mm:ss -> YYYYMMDDhhmmss
+
+            time=time.replace("-","");
+            time=time.replace(":","");
+            time=time.replace(" ","");
+
+            if(time.length()!=14){
                 log.error("Encodes  ----Time Length ERROR ------");
                 return null;
             }
             String address = this.addressCodeService.getCode(data.get("province"), data.get("city"), data.get("county"), data.get("town"), data.get("village"));
             Code += address;
-            Code += Time;
+            Code += time;
 //            对各大类分别进行编码
             Code += _T(data, "SourceCode", "SourceType", "SourceSub");
             Code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
