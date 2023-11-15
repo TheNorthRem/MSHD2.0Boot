@@ -71,8 +71,8 @@ public class UserController {
     }
 
     @GetMapping("/message")
-    @Operation(summary = "获取用户信息(未登录无法获取)", security = {@SecurityRequirement(name = "authorization")})
-    @Parameter(name = "authorization", in = ParameterIn.HEADER, description = "请求头")
+    @Operation(summary = "获取用户信息(未登录无法获取)", security = {@SecurityRequirement(name = "X-Token")})
+    @Parameter(name = "X-Token", in = ParameterIn.HEADER, description = "请求头")
     public Result message() {
         return userService.message();
     }
