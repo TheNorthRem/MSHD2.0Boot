@@ -49,6 +49,7 @@ public class DisasterController {
             if(decodes==null){
                 continue;
             }
+            decodes.put("code",disaster.getId());
             decodes.put("description",disaster.getDescription());
             decodes.put("uploadTime",disaster.getUploadTime().toString());
             decodes.put("updateTime",disaster.getUpdateTime().toString());
