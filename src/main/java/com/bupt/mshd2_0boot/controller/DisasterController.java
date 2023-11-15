@@ -41,7 +41,7 @@ public class DisasterController {
     }
     @GetMapping("/listDisasters")
     @Operation(summary = "查询所有的灾情信息")
-    public Result ListDisasters(){
+    public Result listDisasters(){
         List<Disaster> list = disasterService.list(); //查询所有灾情
         List<Map<String,String>> res=new ArrayList<>();
         for(Disaster disaster: list){
@@ -67,7 +67,7 @@ public class DisasterController {
     ,@Parameter(name="LoaderType",description = "载体形式"),@Parameter(name = "DisasterType",description = "灾情分类")
     ,@Parameter(name="DisasterSub",description = "灾情子类"),@Parameter(name = "CategorySub",description = "灾情指标")
     ,@Parameter(name = "description",description = "描述"),@Parameter(name="Time",description = "时间"),@Parameter(name="uploader",description = "上传者Id")})
-    public Result AddDisasterData(@RequestBody JSONObject data){
+    public Result addDisasterData(@RequestBody JSONObject data){
         Map<String,String> dataMap=new HashMap<>();
         //检测参数是否完整
         for(String keyword:EncodeUtils.keywords){
