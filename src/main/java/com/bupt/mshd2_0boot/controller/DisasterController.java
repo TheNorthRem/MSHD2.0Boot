@@ -39,7 +39,7 @@ public class DisasterController {
         this.userService=userService;
         this.disasterCountService=disasterCountService;
     }
-    @GetMapping("/ListDisasters")
+    @GetMapping("/listDisasters")
     @Operation(summary = "查询所有的灾情信息")
     public Result ListDisasters(){
         List<Disaster> list = disasterService.list(); //查询所有灾情
@@ -58,7 +58,7 @@ public class DisasterController {
         return Result.ok(res);
     }
 
-    @PostMapping("/AddDisasterData")
+    @PostMapping("/addDisasterData")
     @Operation(summary = "添加灾情信息")
     @Parameters({@Parameter(name = "province",description = "省"),@Parameter(name="city",description = "市"),@Parameter(name="county",description = "县")
     ,@Parameter(name="town",description = "镇"),@Parameter(name = "village",description = "村")
