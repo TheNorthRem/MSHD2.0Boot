@@ -76,7 +76,7 @@ public class DisasterController {
             dataMap.put(keyword,key);
         }
 
-        String encodes = encodeUtils.Encodes(dataMap); //编码
+        String encodes = encodeUtils.encodes(dataMap); //编码
 
         if(encodes==null){
             return Result.fail("信息有误");
