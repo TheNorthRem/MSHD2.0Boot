@@ -11,6 +11,7 @@ import com.bupt.mshd2_0boot.mapper.UserMapper;
 import com.bupt.mshd2_0boot.entity.User;
 import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.Result;
+import com.bupt.mshd2_0boot.utils.ThreadLocal.UserHolder;
 import com.bupt.mshd2_0boot.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -183,5 +184,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新数据库
         this.updateById(user);
         return Result.ok();
+    }
+
+    @Override
+    public Result message() {
+        // 从ThreadLocal提取变量
+        UserDTO userDTO = UserHolder.getUser();
+        if (userDTO == null) {
+            return Result.fail("用户未登录!");
+        }
+        return Result.ok(userDTO);
     }
 }
