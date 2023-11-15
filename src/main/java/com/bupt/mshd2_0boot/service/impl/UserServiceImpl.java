@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("phone", phone);
         long count = this.count(queryWrapper);
-        // 查询到说明应该被注册
+        // 查询到说明已经被注册
         if (count != 0) {
             return Result.fail("用户名已经被注册!");
         }
