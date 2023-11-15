@@ -190,7 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result message() {
         // 从ThreadLocal提取变量
         UserDTO userDTO = UserHolder.getUser();
-        if (userDTO == null) {
+        if (userDTO == null) { //null说明没有登录
             return Result.fail("用户未登录!");
         }
         return Result.ok(userDTO);
