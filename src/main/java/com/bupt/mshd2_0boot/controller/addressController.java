@@ -18,24 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Address")
 @Slf4j
 @Tag(name = "地址")
-public class AddressController {
+public class addressController {
     private final AddressCodeService addressCodeService;
 
     @Autowired
-    public AddressController(AddressCodeService addressCodeService) {
+    public addressController(AddressCodeService addressCodeService) {
         this.addressCodeService = addressCodeService;
     }
 
     @GetMapping("/listProvince")
     @Operation(summary = "查询省份")
-    public Result ListProvince() {
+    public Result listProvince() {
         return addressCodeService.listProvince();
     }
 
     @GetMapping("/listCity")
     @Operation(summary = "查询城市")
     @Parameter(name = "province", description = "省份名")
-    public Result ListCity(@RequestParam(name = "province") String province) {
+    public Result listCity(@RequestParam(name = "province") String province) {
         return addressCodeService.listCity(province);
     }
 
@@ -43,7 +43,7 @@ public class AddressController {
     @Operation(summary = "查询县/区")
     @Parameters({@Parameter(name = "province", description = "省份名"),
             @Parameter(name = "city", description = "市")})
-    public Result ListCounty(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city) {
+    public Result listCounty(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city) {
         return addressCodeService.listCounty(province, city);
     }
 
@@ -52,7 +52,7 @@ public class AddressController {
     @Parameters({@Parameter(name = "province", description = "省份名"),
             @Parameter(name = "city", description = "市"),
             @Parameter(name = "county", description = "县/区")})
-    public Result ListCounty(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county) {
+    public Result listTown(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county) {
         return addressCodeService.listTown(province, city, county);
     }
 
@@ -62,7 +62,7 @@ public class AddressController {
             @Parameter(name = "city", description = "市"),
             @Parameter(name = "county", description = "县/区"),
             @Parameter(name = "town", description = "镇/街道")})
-    public Result ListVillage(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county, @RequestParam(name = "town") String town) {
+    public Result listVillage(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county, @RequestParam(name = "town") String town) {
         return addressCodeService.listVillage(province, city, county, town);
     }
 }

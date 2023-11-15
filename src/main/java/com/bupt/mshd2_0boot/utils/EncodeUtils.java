@@ -36,7 +36,7 @@ public class EncodeUtils {
 
 
     /**
-     *SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategorySub"
+     * SourceType,SourceSub,LoaderType,DisasterType,DisasterSub,CategorySub
      * province  省
      * city 市
      * county 县
@@ -48,7 +48,8 @@ public class EncodeUtils {
      * Map中的所有传值都必须以键值对的形式
      * Key 对应 上面的
      * Value 必须和JSON 文件中的值一致
-     * 示例见 ApplicationTest 中的 EncodeTest方法
+     *
+     *
      */
 
     public  String encodes(Map<String,String> data){
@@ -78,10 +79,10 @@ public class EncodeUtils {
             code += address;
             code += time;
 //            对各大类分别进行编码
-            code += _T(data, "SourceCode", "SourceType", "SourceSub");
+            code += encodeParse(data, "SourceCode", "SourceType", "SourceSub");
             code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
-            code += _T(data, "DisasterCode", "DisasterType", "DisasterSub");
-            code += _T(data, "DisasterCategory", "DisasterType", "CategorySub");
+            code += encodeParse(data, "DisasterCode", "DisasterType", "DisasterSub");
+            code += encodeParse(data, "DisasterCategory", "DisasterType", "CategorySub");
         }catch(NullPointerException e){
             log.error("传入信息错误!");
             return null;
@@ -109,10 +110,10 @@ public class EncodeUtils {
         Map<String, String> code = subCode(str);
         Map<String,String> res=new HashMap<>();
         //对各个类分别进行解码
-        _A("SourceCode",code.get("Source"),code.get("SourceSub"),res,"SourceType","SourceSub");
+        decodeParse("SourceCode",code.get("Source"),code.get("SourceSub"),res,"SourceType","SourceSub");
         res.put("LoaderType",decode.getJSONObject("loaderCode").getString(code.get("loaderType")));
-        _A("DisasterCode",code.get("DisasterType"),code.get("DisasterTypeSub"),res,"DisasterType","DisasterSub");
-        _A("DisasterCategory",code.get("DisasterType"),code.get("CategorySub"),res,"CategoryType","CategorySub");
+        decodeParse("DisasterCode",code.get("DisasterType"),code.get("DisasterTypeSub"),res,"DisasterType","DisasterSub");
+        decodeParse("DisasterCategory",code.get("DisasterType"),code.get("CategorySub"),res,"CategoryType","CategorySub");
         res.put("Time",code.get("Time"));
         AddressCode address = addressCodeService.getAddress(code.get("Position"));
         res.put("province",address.getProvince());
@@ -124,7 +125,7 @@ public class EncodeUtils {
     }
 
     //复用函数 对某一类进行编码
-    private String _T(Map<String,String> data,String Main,String Sub,String SubType){
+    private String encodeParse(Map<String,String> data, String Main, String Sub, String SubType){
         String code="";
         String SubData=data.get(Sub);
         if(Main.equals("DisasterCategory")){
@@ -151,7 +152,7 @@ public class EncodeUtils {
 
     //复用函数， 对某一大类进行解码
 
-    private void _A(String type,String code,String subCode,Map<String,String> m,String key,String subKey){
+    private void decodeParse(String type, String code, String subCode, Map<String,String> m, String key, String subKey){
         JSONObject Tp = decode.getJSONObject(type);
         JSONObject SU = Tp.getJSONObject(code);
         if(SU==null) {
