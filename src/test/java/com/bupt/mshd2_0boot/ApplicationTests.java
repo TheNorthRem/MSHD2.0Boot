@@ -41,7 +41,7 @@ class ApplicationTests {
             m.put(key[i], value[i]);
         }
 
-        String encodes = util.Encodes(m);
+        String encodes = util.encodes(m);
 
         System.out.println(encodes);
 

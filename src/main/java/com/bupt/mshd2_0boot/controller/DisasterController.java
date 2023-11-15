@@ -49,6 +49,7 @@ public class DisasterController {
             if(decodes==null){
                 continue;
             }
+            decodes.put("code",disaster.getId());
             decodes.put("description",disaster.getDescription());
             decodes.put("uploadTime",disaster.getUploadTime().toString());
             decodes.put("updateTime",disaster.getUpdateTime().toString());
@@ -75,7 +76,7 @@ public class DisasterController {
             dataMap.put(keyword,key);
         }
 
-        String encodes = encodeUtils.Encodes(dataMap); //编码
+        String encodes = encodeUtils.encodes(dataMap); //编码
 
         if(encodes==null){
             return Result.fail("信息有误");

@@ -51,7 +51,7 @@ public class EncodeUtils {
      * 示例见 ApplicationTest 中的 EncodeTest方法
      */
 
-    public  String Encodes(Map<String,String> data){
+    public  String encodes(Map<String,String> data){
         //检测需要的参数是否存在
         for(String it:EncodeUtils.keywords){
             if(!data.containsKey(it)){
@@ -60,7 +60,7 @@ public class EncodeUtils {
             }
 
         }
-        String Code = "";
+        String code = "";
         try {
             String time = data.get("Time");
 
@@ -75,23 +75,23 @@ public class EncodeUtils {
                 return null;
             }
             String address = this.addressCodeService.getCode(data.get("province"), data.get("city"), data.get("county"), data.get("town"), data.get("village"));
-            Code += address;
-            Code += time;
+            code += address;
+            code += time;
 //            对各大类分别进行编码
-            Code += _T(data, "SourceCode", "SourceType", "SourceSub");
-            Code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
-            Code += _T(data, "DisasterCode", "DisasterType", "DisasterSub");
-            Code += _T(data, "DisasterCategory", "DisasterType", "CategorySub");
+            code += _T(data, "SourceCode", "SourceType", "SourceSub");
+            code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
+            code += _T(data, "DisasterCode", "DisasterType", "DisasterSub");
+            code += _T(data, "DisasterCategory", "DisasterType", "CategorySub");
         }catch(NullPointerException e){
             log.error("传入信息错误!");
             return null;
         }
         //如果编码中有null 则说明编码失败
-        if(Code.contains("null")){
-            log.error(Code);
+        if(code.contains("null")){
+            log.error(code);
             return null;
         }
-        return Code ;
+        return code ;
     }
 
     /**
@@ -125,7 +125,7 @@ public class EncodeUtils {
 
     //复用函数 对某一类进行编码
     private String _T(Map<String,String> data,String Main,String Sub,String SubType){
-        String Code="";
+        String code="";
         String SubData=data.get(Sub);
         if(Main.equals("DisasterCategory")){
             if(SubData.equals("震情")){
@@ -144,9 +144,9 @@ public class EncodeUtils {
         }
         //DisasterCategory的大类代码和Disaster的大类代码一致，因此无需重复编码
         if(!Main.equals("DisasterCategory"))
-            Code+=SourceType.getString("code");
-        Code+=SourceType.getJSONObject("subCode").getString(data.get(SubType));
-        return Code;
+            code+=SourceType.getString("code");
+        code+=SourceType.getJSONObject("subCode").getString(data.get(SubType));
+        return code;
     }
 
     //复用函数， 对某一大类进行解码
