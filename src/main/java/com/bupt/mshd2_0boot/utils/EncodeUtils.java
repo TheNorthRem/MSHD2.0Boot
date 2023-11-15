@@ -54,7 +54,7 @@ public class EncodeUtils {
 
     public  String encodes(Map<String,String> data){
         //检测需要的参数是否存在
-        for(String it:EncodeUtils.keywords){
+        for(String it:EncodeUtils.KEYWORDS){
             if(!data.containsKey(it)){
                 log.error("-------Encodes Parameters missing-----"+it);
                 return null;
@@ -244,10 +244,10 @@ public class EncodeUtils {
         }
 
         JSONObject loaderCode= data.getJSONObject("LoaderCode");
-        JSONObject CodeLoader=new JSONObject();
-        loaderCode.forEach((k,v)-> CodeLoader.put((String) v,k));
+        JSONObject codeLoader=new JSONObject();
+        loaderCode.forEach((k,v)-> codeLoader.put((String) v,k));
 
-        res.put("loaderCode",CodeLoader);
+        res.put("loaderCode",codeLoader);
 
         res.put("SourceCode",parse("SourceCode",data));
 
@@ -257,7 +257,7 @@ public class EncodeUtils {
 
         this.decode=res;
     }
-    public static final String[] keywords={
+    public static final String[] KEYWORDS ={
       "SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategorySub","province","city","county"
             ,"town","village","Time"
     };

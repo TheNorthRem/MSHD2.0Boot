@@ -77,7 +77,7 @@ public class DisasterController {
     public Result addDisasterData(@RequestBody JSONObject data) {
         Map<String, String> dataMap = new HashMap<>();
         //检测参数是否完整
-        for (String keyword : EncodeUtils.keywords) {
+        for (String keyword : EncodeUtils.KEYWORDS) {
             String key = data.getString(keyword);
             if (key == null) return Result.fail("信息缺失" + keyword);
             dataMap.put(keyword, key);
