@@ -103,7 +103,7 @@ public class DisasterController {
 
     @DeleteMapping("/deleteDisaster")
     @Operation(summary="删除灾情信息")
-    @Parameters({@Parameter(name = "id",description = "灾害主键"),@Parameter(name="userId",description = "用户主键")})
+    @Parameters({@Parameter(name = "Id",description = "灾害主键"),@Parameter(name="userId",description = "用户主键")})
     public Result deleteDisaster(@RequestParam Integer Id,@RequestParam Integer userId){
         User user = userService.getById(userId); //获取用户
         if(user==null){
