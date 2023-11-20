@@ -48,6 +48,7 @@ public class DisasterController {
     public Result listDisasters() {
         // TODO: 分页没做，现在就是直接返回50条数据让前端看
         QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("upload_time");
         queryWrapper.last("limit 50");
         List<Disaster> list = disasterService.list(queryWrapper); //查询所有灾情
         List<Map<String, String>> res = new ArrayList<>();
