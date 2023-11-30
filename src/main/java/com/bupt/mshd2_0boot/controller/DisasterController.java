@@ -134,6 +134,32 @@ public class DisasterController {
         return Result.fail("删除失败");
     }
 
+    @PostMapping("/addDisasterByCode")
+    @Operation(summary = "通过编码增加灾情信息")
+    @Parameters({@Parameter(name="Code",description = "灾情编码")})
+    public Result addDisasterByCode(@RequestParam(name = "code") String addressCode){
+
+        Map<String, String> decodes = encodeUtils.decodes(addressCode);
+
+        if(decodes==null)
+            return Result.fail("编码格式错误!");
+
+        Disaster disaster = new Disaster();
+
+        QueryWrapper<Disaster> queryWrapper =  new QueryWrapper<>();
+
+        queryWrapper.eq("id",decodes);
+
+        if(disasterService.count(queryWrapper)!=0){
+            return Result.fail("该灾情信息已经上传");
+        }
+
+        disasterService.save(disaster);
+
+        return Result.ok();
+    }
+
+
     @GetMapping("/getDisasterCount")
     @Operation(summary = "获取灾情地域统计信息")
     public Result getDisasterCount() {
