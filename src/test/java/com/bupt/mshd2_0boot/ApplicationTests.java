@@ -7,7 +7,6 @@ import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.GaoDeAPI;
 import com.bupt.mshd2_0boot.utils.ParseFileTools;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
