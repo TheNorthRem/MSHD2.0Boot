@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -22,13 +23,13 @@ public class FileTools {
      * @param isDelete      解析后是否要删除文件
      * @param parseFunction 将字符串反射成对应类的方法
      * @param <T>           需要反射出来的类
-     * @return 反射对应出来的实体类
-     * @throws IOException 没有对应文件/路径是目录的异常|文件权限不足地异常|反射解析失败的异常
+     * @return 反射对应出来的实体类数组
+     * @throws IOException 没有对应文件的异常|路径是目录的异常|文件权限不足地异常|反射解析失败的异常
      */
-    public static <T> T parseFile(Path path, Class<T> type, boolean isDelete, BiFunction<String, Class<T>, T> parseFunction) throws IOException {
+    public static <T> List<T> parseFile(Path path, Class<T> type, boolean isDelete, BiFunction<String, Class<T>, List<T>> parseFunction) throws IOException {
         // 文件不存在
         if (!Files.exists(path)) {
-            log.error("对应路径:{}下没有文件", path);
+            log.error("对应路径:{}下没有对应文件", path);
             throw new NoSuchFileException(path.toString());
         }
 
@@ -40,7 +41,7 @@ public class FileTools {
         // 获取文件内容
         String content = new String(Files.readAllBytes(path));
         // 反射到类上
-        T ans = parseFunction.apply(content, type);
+        List<T> ans = parseFunction.apply(content, type);
 
         // 删除文件
         if (isDelete) {
@@ -56,23 +57,23 @@ public class FileTools {
      * @param content JSON字符串
      * @param type    需要反射类的Class
      * @param <T>     反射出来的类
-     * @return 反射出来的类
+     * @return 反射出来的类数组
      */
-    public static <T> T parseJSON(String content, Class<T> type) {
-        return JSON.parseObject(content, type);
+    public static <T> List<T> parseJSON(String content, Class<T> type) {
+        return JSON.parseArray(content, type);
     }
 
     /**
      * 反射XML字符串到类上
      *
-     * @param content JSON字符串
+     * @param content XML字符串
      * @param type    需要反射类的Class
      * @param <T>     反射出来的类
-     * @return 反射出来的类
+     * @return 反射出来的类数组
      * @throws JsonProcessingException 解析失败
      */
-    public static <T> T parseXML(String content, Class<T> type) throws JsonProcessingException {
+    public static <T> List<T> parseXML(String content, Class<T> type) throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
-        return xmlMapper.readValue(content, type);
+        return xmlMapper.readValue(content, xmlMapper.getTypeFactory().constructCollectionType(List.class, type));
     }
 }

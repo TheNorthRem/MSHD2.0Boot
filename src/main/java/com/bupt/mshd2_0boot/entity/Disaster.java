@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,42 +19,48 @@ import java.time.LocalDateTime;
 @TableName("disaster")
 @Schema(description = "灾情数据")
 @AllArgsConstructor
+@JacksonXmlRootElement(localName = "Disaster")
 public class Disaster {
     @TableId(type = IdType.AUTO)
     @Schema(description = "主键")
+    @JacksonXmlProperty(localName = "disasterId")
     private Integer disasterId;
 
     @TableField("id")
     @Schema(description = "灾情编码")
+    @JacksonXmlProperty(localName = "id")
     private String id;
 
     @TableField("description")
     @Schema(description = "描述")
+    @JacksonXmlProperty(localName = "description")
     private String description;
 
     @TableField("file_path")
     @Schema(description = "载体路径")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JacksonXmlProperty(localName = "filepath")
     private String filePath;
 
     @TableField("upload_time")
     @Schema(description = "上传时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JacksonXmlProperty(localName = "uploadTime")
     private Timestamp uploadTime;
 
     @TableField("uploader")
     @Schema(description = "上传者")
+    @JacksonXmlProperty(localName = "uploader")
     private Integer uploader;
 
     @TableField("update_time")
     @Schema(description = "更新时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JacksonXmlProperty(localName = "updateTime")
     private Timestamp updateTime;
 
-    public Disaster(){
+    public Disaster() {
         this.setUploadTime(Timestamp.valueOf(LocalDateTime.now()));
         this.setUpdateTime(this.getUploadTime());
     }
