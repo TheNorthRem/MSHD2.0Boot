@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 /**
- * 操作文件的工具类
+ * 解析文件的工具类
  */
 @Slf4j
-public class FileTools {
+public class ParseFileTools {
     /**
      * 解析文件(失败抛出异常)
      *
