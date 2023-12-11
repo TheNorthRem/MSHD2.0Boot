@@ -1,0 +1,20 @@
+[
+  {
+    "disasterId": 1,
+    "id": "XYZ123",
+    "description": "Sample disaster description 1",
+    "filepath": "/path/to/file1",
+    "uploadTime": "2023-01-01 12:34:56",
+    "uploader": 123,
+    "updateTime": "2023-01-01 12:34:56"
+  },
+  {
+    "disasterId": 2,
+    "id": "ABC456",
+    "description": "Sample disaster description 2",
+    "filepath": "/path/to/file2",
+    "uploadTime": "2023-02-01 08:45:30",
+    "uploader": 456,
+    "updateTime": "2023-02-01 08:45:30"
+  }
+]

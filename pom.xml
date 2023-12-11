@@ -160,6 +160,13 @@
             <version>2.14.0</version>
         </dependency>
 
+        <!--opencsv CSV解析-->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.7.1</version>
+        </dependency>
+
         <!--redisson-->
         <dependency>
             <groupId>org.redisson</groupId>

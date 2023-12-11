@@ -3,10 +3,16 @@ package com.bupt.mshd2_0boot.utils;
 import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
-import java.nio.file.*;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -43,6 +49,11 @@ public class ParseFileTools {
         // 反射到类上
         List<T> ans = parseFunction.apply(content, type);
 
+        // 为空证明检测失败
+        if (ans == null) {
+            throw new IOException(new SerialException("反射解析失败"));
+        }
+
         // 删除文件
         if (isDelete) {
             Files.delete(path);
@@ -57,7 +68,7 @@ public class ParseFileTools {
      * @param content JSON字符串
      * @param type    需要反射类的Class
      * @param <T>     反射出来的类
-     * @return 反射出来的类数组
+     * @return 反射出来的类数组(失败为null)
      */
     public static <T> List<T> parseJSON(String content, Class<T> type) {
         return JSON.parseArray(content, type);
@@ -69,11 +80,34 @@ public class ParseFileTools {
      * @param content XML字符串
      * @param type    需要反射类的Class
      * @param <T>     反射出来的类
-     * @return 反射出来的类数组
-     * @throws JsonProcessingException 解析失败
+     * @return 反射出来的类数组(失败为null)
      */
-    public static <T> List<T> parseXML(String content, Class<T> type) throws JsonProcessingException {
-        XmlMapper xmlMapper = new XmlMapper();
-        return xmlMapper.readValue(content, xmlMapper.getTypeFactory().constructCollectionType(List.class, type));
+    public static <T> List<T> parseXML(String content, Class<T> type) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            return xmlMapper.readValue(content, xmlMapper.getTypeFactory().constructCollectionType(List.class, type));
+        } catch (JsonProcessingException jsonProcessingException) {
+            log.error(String.valueOf(jsonProcessingException));
+            return null;
+        }
+    }
+
+    /**
+     * 反射CSV字符串到类上
+     *
+     * @param content   CSV字符串
+     * @param type      需要反射类的Class
+     * @param <T>反射出来的类
+     * @return 反射出来的类数组(失败为null)
+     */
+    public static <T> List<T> parseCSV(String content, Class<T> type) {
+        StringReader stringReader = new StringReader(content);
+
+        CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(stringReader)
+                .withType(type)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build();
+
+        return csvToBean.parse();
     }
 }

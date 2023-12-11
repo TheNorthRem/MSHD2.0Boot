@@ -6,28 +6,39 @@ import com.bupt.mshd2_0boot.service.AddressCodeService;
 import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.GaoDeAPI;
+import com.bupt.mshd2_0boot.utils.ParseFileTools;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
 class ApplicationTests {
+    private final ResourceLoader resourceLoader;
     private final EncodeUtils util;
     private final AddressCodeService addressCodeService;
 
     private final DisasterService disasterService;
+
     @Autowired
-    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService,DisasterService service) {
+    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService, DisasterService service, ResourceLoader resourceLoader) {
         this.util = utils;
         this.addressCodeService = addressCodeService;
-        this.disasterService=service;
+        this.disasterService = service;
+        this.resourceLoader = resourceLoader;
     }
 
     @Test
-    void PageTest(){
+    void PageTest() {
         Page<Disaster> disasterPage = disasterService.listAll(4);
         System.out.println(disasterPage.getRecords());
     }
@@ -39,8 +50,6 @@ class ApplicationTests {
         System.out.println(decodes);
 
     }
-
-
 
 
     @Test
@@ -91,5 +100,26 @@ class ApplicationTests {
         System.out.println(addressCodeService.getAddress("540224207204"));
         System.out.println(addressCodeService.getAddress("540224207207"));
         System.out.println(addressCodeService.getAddress("54022420720"));
+    }
+
+    @Test
+    void TestParseFileJSON() throws IOException {
+        Resource jsonResource = resourceLoader.getResource("classpath:parseFileTestJson.json");
+        Path jsonPath = Paths.get(jsonResource.getURI());
+        System.out.println(ParseFileTools.parseFile(jsonPath, Disaster.class, false, ParseFileTools::parseJSON));
+    }
+
+    @Test
+    void TestParseFileXML() throws IOException {
+        Resource xmlResource = resourceLoader.getResource("classpath:parseFileTestXML.xml");
+        Path xmlPath = Paths.get(xmlResource.getURI());
+        System.out.println(ParseFileTools.parseFile(xmlPath, Disaster.class, false, ParseFileTools::parseXML));
+    }
+
+    @Test
+    void TestParseFileCSV() throws IOException {
+        Resource csvResource = resourceLoader.getResource("classpath:parseFileTestCSV.csv");
+        Path csvPath = Paths.get(csvResource.getURI());
+        System.out.println(ParseFileTools.parseFile(csvPath, Disaster.class, false, ParseFileTools::parseCSV));
     }
 }
