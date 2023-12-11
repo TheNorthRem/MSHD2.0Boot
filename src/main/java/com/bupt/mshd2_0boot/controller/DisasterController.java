@@ -2,6 +2,7 @@ package com.bupt.mshd2_0boot.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.entity.DisasterCount;
 import com.bupt.mshd2_0boot.entity.User;
@@ -45,14 +46,12 @@ public class DisasterController {
 
     @GetMapping("/listDisasters")
     @Operation(summary = "查询所有的灾情信息")
-    public Result listDisasters() {
-        // TODO: 分页没做，现在就是直接返回50条数据让前端看
-        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("upload_time");
-        queryWrapper.last("limit 50");
-        List<Disaster> list = disasterService.list(queryWrapper); //查询所有灾情
+    @Parameter(name = "page",description = "页数")
+    public Result listDisasters(@RequestParam Integer page) {
+        Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
+        List<Disaster> records = disasterPage.getRecords();
         List<Map<String, String>> res = new ArrayList<>();
-        for (Disaster disaster : list) {
+        for (Disaster disaster : records) {
             Map<String, String> decodes = encodeUtils.decodes(disaster.getId()); //解码返回
             if (decodes == null) {
                 continue;

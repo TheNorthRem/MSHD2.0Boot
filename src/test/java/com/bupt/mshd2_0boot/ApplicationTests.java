@@ -1,5 +1,7 @@
 package com.bupt.mshd2_0boot;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
 import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
@@ -22,6 +24,12 @@ class ApplicationTests {
         this.util = utils;
         this.addressCodeService = addressCodeService;
         this.disasterService=service;
+    }
+
+    @Test
+    void PageTest(){
+        Page<Disaster> disasterPage = disasterService.listAll(4);
+        System.out.println(disasterPage.getRecords());
     }
 
     @Test
