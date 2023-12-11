@@ -1,6 +1,7 @@
 package com.bupt.mshd2_0boot;
 
 import com.bupt.mshd2_0boot.service.AddressCodeService;
+import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.GaoDeAPI;
 import org.junit.jupiter.api.Test;
@@ -15,10 +16,12 @@ class ApplicationTests {
     private final EncodeUtils util;
     private final AddressCodeService addressCodeService;
 
+    private final DisasterService disasterService;
     @Autowired
-    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService) {
+    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService,DisasterService service) {
         this.util = utils;
         this.addressCodeService = addressCodeService;
+        this.disasterService=service;
     }
 
     @Test
@@ -28,6 +31,8 @@ class ApplicationTests {
         System.out.println(decodes);
 
     }
+
+
 
 
     @Test
