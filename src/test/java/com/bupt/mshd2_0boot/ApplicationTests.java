@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -104,20 +105,23 @@ class ApplicationTests {
     void TestParseFileJSON() throws IOException {
         Resource jsonResource = resourceLoader.getResource("classpath:parseFileTestJson.json");
         Path jsonPath = Paths.get(jsonResource.getURI());
-        System.out.println(ParseFileTools.parseFile(jsonPath, Disaster.class, false, ParseFileTools::parseJSON));
+        System.out.println(ParseFileTools.parseFile(jsonPath.toFile(), Disaster.class, false, ParseFileTools::parseJSON));
     }
 
     @Test
     void TestParseFileXML() throws IOException {
         Resource xmlResource = resourceLoader.getResource("classpath:parseFileTestXML.xml");
         Path xmlPath = Paths.get(xmlResource.getURI());
-        System.out.println(ParseFileTools.parseFile(xmlPath, Disaster.class, false, ParseFileTools::parseXML));
+        System.out.println(ParseFileTools.parseFile(xmlPath.toFile(), Disaster.class, false, ParseFileTools::parseXML));
     }
 
     @Test
     void TestParseFileCSV() throws IOException {
         Resource csvResource = resourceLoader.getResource("classpath:parseFileTestCSV.csv");
         Path csvPath = Paths.get(csvResource.getURI());
-        System.out.println(ParseFileTools.parseFile(csvPath, Disaster.class, false, ParseFileTools::parseCSV));
+        List<Disaster> disasterList = ParseFileTools.parseFile(csvPath.toFile(), Disaster.class, false, ParseFileTools::parseCSV);
+        for (var x : disasterList) {
+            System.out.println(x);
+        }
     }
 }

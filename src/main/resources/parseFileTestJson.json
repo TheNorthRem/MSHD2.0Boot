@@ -5,7 +5,6 @@
     "description": "Sample disaster description 1",
     "filepath": "/path/to/file1",
     "uploadTime": "2023-01-01 12:34:56",
-    "uploader": 123,
     "updateTime": "2023-01-01 12:34:56"
   },
   {

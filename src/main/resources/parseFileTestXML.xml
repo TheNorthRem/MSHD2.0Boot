@@ -14,7 +14,6 @@
         <description>Sample disaster description 2</description>
         <filepath>/path/to/file2</filepath>
         <uploadTime>2023-02-01 08:45:30</uploadTime>
-        <uploader>456</uploader>
         <updateTime>2023-02-01 08:45:30</updateTime>
     </Disaster>
 </Disasters>

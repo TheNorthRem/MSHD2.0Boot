@@ -8,11 +8,13 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.rowset.serial.SerialException;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -24,7 +26,7 @@ public class ParseFileTools {
     /**
      * 解析文件(失败抛出异常)
      *
-     * @param path          文件路径
+     * @param file          文件
      * @param type          反射时需要使用的Class
      * @param isDelete      解析后是否要删除文件
      * @param parseFunction 将字符串反射成对应类的方法
@@ -32,7 +34,8 @@ public class ParseFileTools {
      * @return 反射对应出来的实体类数组
      * @throws IOException 没有对应文件的异常|路径是目录的异常|文件权限不足地异常|反射解析失败的异常
      */
-    public static <T> List<T> parseFile(Path path, Class<T> type, boolean isDelete, BiFunction<String, Class<T>, List<T>> parseFunction) throws IOException {
+    public static <T> List<T> parseFile(File file, Class<T> type, boolean isDelete, BiFunction<String, Class<T>, List<T>> parseFunction) throws IOException {
+        Path path = Paths.get(file.getPath());
         // 文件不存在
         if (!Files.exists(path)) {
             log.error("对应路径:{}下没有对应文件", path);
