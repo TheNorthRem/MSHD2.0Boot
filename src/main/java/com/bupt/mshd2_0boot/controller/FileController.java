@@ -7,6 +7,7 @@ import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.ParseFileTools;
 import com.bupt.mshd2_0boot.utils.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,33 +15,55 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/Csv")
 @Slf4j
 @Tag(name = "地址")
-public class CsvController {
+public class FileController {
 
     private final EncodeUtils encodeUtils;
     private final DisasterService disasterService;
     @Autowired
-    public CsvController(EncodeUtils encodeUtils,DisasterService disasterService){
+    public FileController(EncodeUtils encodeUtils, DisasterService disasterService){
         this.encodeUtils=encodeUtils;
         this.disasterService=disasterService;
     }
 
     @PostMapping("/Upload")
-    public Result csvUpload(@RequestPart("file") MultipartFile file,@RequestParam("uploaderId") Integer Id){
+    public Result Upload(@RequestPart("file") MultipartFile file,@RequestParam("uploaderId") Integer Id){
 
         File csv = new File(System.getProperty("java.io.tmpdir"));
         if(!csv.mkdir()) return Result.fail("ERROR");
+
         File tmp;
+        String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
         try {
-            tmp = File.createTempFile("tmp", ".csv");
+            tmp = File.createTempFile("tmp", format);
             file.transferTo(tmp);
-            List<Disaster> disasterList = ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseCSV);
-//            System.out.println(disasterList);
+
+
+            List<Disaster> disasterList;
+
+            switch (format){
+                case ".csv":
+                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseCSV);
+                    break;
+                case ".json":
+                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseJSON);
+
+                    break;
+                case ".xml":
+                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseXML);
+                    break;
+                default:
+                    return Result.fail("文件格式错误");
+            }
+
+
 
             for (Disaster disaster:disasterList) {
                 disaster.setUploader(Id);
@@ -59,10 +82,17 @@ public class CsvController {
                 disasterService.save(disaster);
             }
 
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return Result.ok();
+    }
+
+    @GetMapping("/download")
+    public Result csvDownload(HttpRequest request, HttpServletResponse response){
+
+
+
+        return null;
     }
 }
