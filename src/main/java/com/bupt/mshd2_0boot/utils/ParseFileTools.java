@@ -5,18 +5,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.rowset.serial.SerialException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 解析文件的工具类
@@ -112,5 +119,65 @@ public class ParseFileTools {
                 .build();
 
         return csvToBean.parse();
+    }
+
+    /**
+     * 序列化对象集合
+     *
+     * @param objects          序列化对象集合
+     * @param serializedMethod 序列化方法(返回值是String,可以复用)
+     * @param <T>              序列化的类
+     * @return 序列化之后UTF_8的字节流
+     */
+    public static <T> byte[] serializedObject(List<T> objects, Function<List<T>, String> serializedMethod) {
+        return serializedMethod.apply(objects).getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 序列化对象集合为JSON字符串
+     *
+     * @param objects 对象集合
+     * @param <T>     对象类型
+     * @return 序列化后的字符串
+     */
+    public static <T> String serializedJSON(List<T> objects) {
+        return JSON.toJSONString(objects);
+    }
+
+    /**
+     * 序列化对象集合为XML字符串
+     *
+     * @param objects 对象集合
+     * @param <T>     对象类型
+     * @return 序列化后的字符串
+     */
+    public static <T> String serializedXML(List<T> objects) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            return xmlMapper.writeValueAsString(objects);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 序列化对象集合为CSV字符串
+     *
+     * @param objects 对象集合
+     * @param <T>     对象类型
+     * @return 序列化后的字符串
+     */
+    public static <T> String serializedCSV(List<T> objects) {
+        try {
+            StringWriter stringWriter = new StringWriter();
+            StatefulBeanToCsv<T> statefulBeanToCsv = new StatefulBeanToCsvBuilder<T>(stringWriter)
+                    .withApplyQuotesToAll(false)
+                    .build();
+
+            statefulBeanToCsv.write(objects);
+            return stringWriter.toString();
+        } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

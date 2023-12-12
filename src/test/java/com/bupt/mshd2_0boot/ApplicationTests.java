@@ -1,5 +1,6 @@
 package com.bupt.mshd2_0boot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
@@ -14,8 +15,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,6 +126,45 @@ class ApplicationTests {
         List<Disaster> disasterList = ParseFileTools.parseFile(csvPath.toFile(), Disaster.class, false, ParseFileTools::parseCSV);
         for (var x : disasterList) {
             System.out.println(x);
+        }
+    }
+
+    @Test
+    void TestSerializedJSON() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseJSON(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedJSON), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
+        }
+    }
+
+    @Test
+    void TestSerializedXML() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseXML(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedXML), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
+        }
+    }
+
+    @Test
+    void TestSerializedCSV() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseCSV(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedCSV), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
         }
     }
 }
