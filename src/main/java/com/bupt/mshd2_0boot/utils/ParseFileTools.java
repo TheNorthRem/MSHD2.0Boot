@@ -9,7 +9,6 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.rowset.serial.SerialException;
 import java.io.File;
@@ -28,7 +27,6 @@ import java.util.function.Function;
 /**
  * 解析文件的工具类
  */
-@Slf4j
 public class ParseFileTools {
     /**
      * 解析文件(失败抛出异常)
@@ -45,7 +43,6 @@ public class ParseFileTools {
         Path path = Paths.get(file.getPath());
         // 文件不存在
         if (!Files.exists(path)) {
-            log.error("对应路径:{}下没有对应文件", path);
             throw new NoSuchFileException(path.toString());
         }
 
@@ -61,7 +58,7 @@ public class ParseFileTools {
 
         // 为空证明检测失败
         if (ans == null) {
-            throw new IOException(new SerialException("反射解析失败"));
+            throw new RuntimeException(new SerialException("反射解析失败"));
         }
 
         // 删除文件
@@ -97,8 +94,7 @@ public class ParseFileTools {
             XmlMapper xmlMapper = new XmlMapper();
             return xmlMapper.readValue(content, xmlMapper.getTypeFactory().constructCollectionType(List.class, type));
         } catch (JsonProcessingException jsonProcessingException) {
-            log.error(String.valueOf(jsonProcessingException));
-            return null;
+            throw new RuntimeException(jsonProcessingException);
         }
     }
 
