@@ -33,4 +33,4 @@ GaodeApiAddressCode: "https://restapi.amap.com/v3/config/district" # 高德api(�
 ConnectionTimeout: 5000 # 连接超时时间: 5s
 SocketTimeout: 5000 # 读取超时时间：5s
 
-pageSize: 5
+pageSize: 20

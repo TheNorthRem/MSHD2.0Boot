@@ -63,7 +63,13 @@ public class DisasterController {
             decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
             res.add(decodes);
         }
-        return Result.ok(res);
+
+        JSONObject resObj =new JSONObject();
+        resObj.put("record",res);
+        resObj.put("pages",disasterPage.getPages());
+        resObj.put("total",disasterPage.getTotal());
+
+        return Result.ok(resObj);
     }
 
     @PostMapping("/addDisasterData")
