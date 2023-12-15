@@ -3,6 +3,9 @@ package com.bupt.mshd2_0boot.utils;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 工具类
  */
@@ -26,6 +29,34 @@ public class Tools {
      */
     public static boolean isPhoneInvalid(String phone) {
         return mismatch(phone);
+    }
+
+    private static final List<String> video= Arrays.asList(".mp4",".avi",".mov");
+
+    private static final List<String> image= Arrays.asList(".jpg",".png");
+
+    private static final List<String> sound= Arrays.asList(".mp3",".wav");
+
+    public  static boolean CheckFormat(String loaderType,String format){
+        switch (loaderType){
+            case "0":
+                if (!format.equals(".txt")) return false;
+                break;
+            case "1":
+                if(!image.contains(format)) return false;
+                break;
+            case "2":
+                if(!sound.contains(format)) return false;
+                break;
+
+            case"3":
+                if(!video.contains(format)) return false;
+                break;
+            case"4":
+                return true;
+        }
+
+            return false;
     }
 
     private static boolean mismatch(String str) {

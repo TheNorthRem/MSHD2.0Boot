@@ -141,11 +141,10 @@ public class DisasterController {
 
     @PostMapping("/addDisasterByCode")
     @Operation(summary = "通过编码增加灾情信息")
-    @Parameters({@Parameter(name="Code",description = "灾情编码")})
-    public Result addDisasterByCode(@RequestParam(name = "code") String addressCode){
+    @Parameters({@Parameter(name="Code",description = "灾情编码"),@Parameter(name="description",description = "灾情描述")})
+    public Result addDisasterByCode(@RequestParam(name = "code") String addressCode,@RequestParam(name = "description") String description){
 
         Map<String, String> decodes = encodeUtils.decodes(addressCode);
-
         if(decodes==null)
             return Result.fail("编码格式错误!");
 
@@ -170,4 +169,6 @@ public class DisasterController {
     public Result getDisasterCount() {
         return Result.ok(disasterCountService.list());
     }
+
+
 }

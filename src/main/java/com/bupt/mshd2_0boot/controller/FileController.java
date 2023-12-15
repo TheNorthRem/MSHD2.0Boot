@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.DisasterService;
-import com.bupt.mshd2_0boot.utils.EncodeUtils;
-import com.bupt.mshd2_0boot.utils.ParseFileTools;
-import com.bupt.mshd2_0boot.utils.Result;
+import com.bupt.mshd2_0boot.utils.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -22,8 +20,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @Resource
@@ -35,7 +32,7 @@ public class FileController {
     private final EncodeUtils encodeUtils;
     private final DisasterService disasterService;
     @Autowired
-    public FileController(EncodeUtils encodeUtils, DisasterService disasterService){
+    public FileController(EncodeUtils encodeUtils, DisasterService disasterService ){
         this.encodeUtils=encodeUtils;
         this.disasterService=disasterService;
     }
@@ -119,9 +116,6 @@ public class FileController {
                 return;
         }
 
-
-
-
         try {
             response.reset();
             response.setCharacterEncoding("UTF-8");
@@ -137,4 +131,52 @@ public class FileController {
             e.printStackTrace();
         }
     }
+
+    @PostMapping("/loaderUpload")
+    @Operation(summary = "载体上传")
+    @Parameters({@Parameter(name="disasterId",description = "灾情主键"),@Parameter(name="file",description = "载体文件")})
+    public Result loaderUpload(@RequestParam(name="disasterId") Integer disasterId,@RequestParam(name="file") MultipartFile file){
+
+        String path = EnvironmentValue.getParamSettings("file_path");
+
+        Calendar instance = Calendar.getInstance();
+        String month = (instance.get(Calendar.MONTH) + 1) + "月";
+        path = path + month;
+
+        String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
+
+        Disaster disaster = disasterService.getById(disasterId);
+
+        Map<String, String> decodes = encodeUtils.decodes(disaster.getId());
+
+        String loaderType = decodes.get("LoaderType");
+
+        if(!Tools.CheckFormat(loaderType,format)){
+            return Result.fail("文件格式不合规");
+        }
+
+
+        File realPath = new File(path);
+        if (!realPath.exists()) {
+            realPath.mkdirs();
+        }
+
+        String filename = "pg-" + UUID.randomUUID().toString().replaceAll("-", "") + format;
+        File newfile = new File(realPath, filename);
+
+        try {
+            file.transferTo(newfile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        disaster.setFilePath(month+"/"+filename);
+
+        disasterService.updateById(disaster);
+
+        return Result.ok();
+    }
+
+
+
 }
