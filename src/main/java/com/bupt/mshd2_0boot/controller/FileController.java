@@ -8,6 +8,7 @@ import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.ParseFileTools;
 import com.bupt.mshd2_0boot.utils.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.http.HttpRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
 @RestController
+@Resource
 @RequestMapping("/Csv")
 @Slf4j
 @Tag(name = "地址")
@@ -93,7 +93,7 @@ public class FileController {
     }
 
     @GetMapping("/download")
-    public Result csvDownload( HttpServletResponse response,@RequestParam("page") Integer page){
+    public void csvDownload( HttpServletResponse response,@RequestParam("page") Integer page){
         Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
         List<Disaster> records = disasterPage.getRecords();
         byte[] buffer = ParseFileTools.serializedObject(records, ParseFileTools::serializedCSV);
@@ -106,13 +106,12 @@ public class FileController {
             response.addHeader("Content-Length",""+buffer.length);
 
             OutputStream outputStream=new BufferedOutputStream(response.getOutputStream());
-            response.setContentType("application/octet-stream;charset=utf-8");
+            response.setContentType("application/octet-stream");
             outputStream.write(buffer);
             outputStream.flush();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return Result.ok();
     }
 }
