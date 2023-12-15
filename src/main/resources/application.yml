@@ -32,3 +32,5 @@ GaodeKey: "e9e73ff0da55fd71b277287462d2dcc7" # 高德api的key
 GaodeApiAddressCode: "https://restapi.amap.com/v3/config/district" # 高德api(行政区编码)
 ConnectionTimeout: 5000 # 连接超时时间: 5s
 SocketTimeout: 5000 # 读取超时时间：5s
+
+pageSize: 5

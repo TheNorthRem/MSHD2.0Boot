@@ -45,13 +45,13 @@ for sheetName in sheetNames:
     df: pd.DataFrame = pd.read_excel(filePath, sheet_name=sheetName)
 
     for row in df.itertuples(index=False):
-        id: str = row[0]
+        index: str = row[0]
         province: str = row[1]
         city: str = row[2]
         county: str = row[3]
         town: str = row[4]
         village: str = row[5]
-        insertSql: str = f"insert into addressCode (id, province, city, county, town, village) values ('{id}', '{province}', '{city}', '{county}', '{town}', '{village}');"
+        insertSql: str = f"insert into addressCode (id, province, city, county, town, village) values ('{index}', '{province}', '{city}', '{county}', '{town}', '{village}');"
         cursor.execute(insertSql)
     # 每读取完一个报表提交一次
     conn.commit()

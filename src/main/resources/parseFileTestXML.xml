@@ -1,0 +1,19 @@
+<Disasters>
+    <Disaster>
+        <disasterId>1</disasterId>
+        <id>XYZ123</id>
+        <description>Sample disaster description 1</description>
+        <filepath>/path/to/file1</filepath>
+        <uploadTime>2023-01-01 12:34:56</uploadTime>
+        <uploader>123</uploader>
+        <updateTime>2023-01-01 12:34:56</updateTime>
+    </Disaster>
+    <Disaster>
+        <disasterId>2</disasterId>
+        <id>ABC456</id>
+        <description>Sample disaster description 2</description>
+        <filepath>/path/to/file2</filepath>
+        <uploadTime>2023-02-01 08:45:30</uploadTime>
+        <updateTime>2023-02-01 08:45:30</updateTime>
+    </Disaster>
+</Disasters>

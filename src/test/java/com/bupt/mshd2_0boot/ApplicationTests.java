@@ -1,24 +1,47 @@
 package com.bupt.mshd2_0boot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
+import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.GaoDeAPI;
+import com.bupt.mshd2_0boot.utils.ParseFileTools;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
 class ApplicationTests {
+    private final ResourceLoader resourceLoader;
     private final EncodeUtils util;
     private final AddressCodeService addressCodeService;
 
+    private final DisasterService disasterService;
+
     @Autowired
-    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService) {
+    public ApplicationTests(EncodeUtils utils, AddressCodeService addressCodeService, DisasterService service, ResourceLoader resourceLoader) {
         this.util = utils;
         this.addressCodeService = addressCodeService;
+        this.disasterService = service;
+        this.resourceLoader = resourceLoader;
+    }
+
+    @Test
+    void PageTest() {
+        Page<Disaster> disasterPage = disasterService.listAll(4);
+        System.out.println(disasterPage.getRecords());
     }
 
     @Test
@@ -78,5 +101,68 @@ class ApplicationTests {
         System.out.println(addressCodeService.getAddress("540224207204"));
         System.out.println(addressCodeService.getAddress("540224207207"));
         System.out.println(addressCodeService.getAddress("54022420720"));
+    }
+
+    @Test
+    void TestParseFileJSON() throws IOException {
+        Resource jsonResource = resourceLoader.getResource("classpath:parseFileTestJson.json");
+        Path jsonPath = Paths.get(jsonResource.getURI());
+        System.out.println(ParseFileTools.parseFile(jsonPath.toFile(), Disaster.class, false, ParseFileTools::parseJSON));
+    }
+
+    @Test
+    void TestParseFileXML() throws IOException {
+        Resource xmlResource = resourceLoader.getResource("classpath:parseFileTestXML.xml");
+        Path xmlPath = Paths.get(xmlResource.getURI());
+        System.out.println(ParseFileTools.parseFile(xmlPath.toFile(), Disaster.class, false, ParseFileTools::parseXML));
+    }
+
+    @Test
+    void TestParseFileCSV() throws IOException {
+        Resource csvResource = resourceLoader.getResource("classpath:parseFileTestCSV.csv");
+        Path csvPath = Paths.get(csvResource.getURI());
+        List<Disaster> disasterList = ParseFileTools.parseFile(csvPath.toFile(), Disaster.class, false, ParseFileTools::parseCSV);
+        for (var x : disasterList) {
+            System.out.println(x);
+        }
+    }
+
+    @Test
+    void TestSerializedJSON() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseJSON(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedJSON), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
+        }
+    }
+
+    @Test
+    void TestSerializedXML() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseXML(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedXML), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
+        }
+    }
+
+    @Test
+    void TestSerializedCSV() {
+        QueryWrapper<Disaster> queryWrapper = new QueryWrapper<>();
+        queryWrapper.last("limit 5");
+        List<Disaster> disasterList = disasterService.list(queryWrapper);
+        disasterList = ParseFileTools.parseCSV(new String(ParseFileTools.serializedObject(disasterList, ParseFileTools::serializedCSV), StandardCharsets.UTF_8), Disaster.class);
+        if (disasterList != null) {
+            for (var x : disasterList) {
+                System.out.println(x);
+            }
+        }
     }
 }
