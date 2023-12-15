@@ -1,6 +1,7 @@
 package com.bupt.mshd2_0boot.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.DisasterService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
@@ -13,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,10 +93,26 @@ public class FileController {
     }
 
     @GetMapping("/download")
-    public Result csvDownload(HttpRequest request, HttpServletResponse response){
+    public Result csvDownload( HttpServletResponse response,@RequestParam("page") Integer page){
+        Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
+        List<Disaster> records = disasterPage.getRecords();
+        byte[] buffer = ParseFileTools.serializedObject(records, ParseFileTools::serializedCSV);
 
 
+        try {
+            response.reset();
+            response.setCharacterEncoding("UTF-8");
+            response.addHeader("Content-Disposition","attachment;filename=data.csv");
+            response.addHeader("Content-Length",""+buffer.length);
 
-        return null;
+            OutputStream outputStream=new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream;charset=utf-8");
+            outputStream.write(buffer);
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Result.ok();
     }
 }
