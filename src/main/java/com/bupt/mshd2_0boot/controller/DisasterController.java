@@ -156,7 +156,7 @@ public class DisasterController {
 
         QueryWrapper<Disaster> queryWrapper =  new QueryWrapper<>();
 
-        queryWrapper.eq("id",decodes);
+        queryWrapper.eq("id",code);
 
         if(disasterService.count(queryWrapper)!=0){
             return Result.fail("该灾情信息已经上传");
