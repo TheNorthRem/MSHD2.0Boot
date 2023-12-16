@@ -1,5 +1,6 @@
 package com.bupt.mshd2_0boot;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,11 +168,10 @@ class ApplicationTests {
     }
 
     @Test
-    void TestSelectType(){
+    void TestSelectType() {
         Page<Disaster> disasterPage = disasterService.selectByType(1, 1);
 
         List<Disaster> records = disasterPage.getRecords();
-        List<Map<String, String>> res = new ArrayList<>();
         for (Disaster disaster : records) {
             Map<String, String> decodes = util.decodes(disaster.getId()); //解码返回
             if (decodes == null) {
@@ -180,5 +179,26 @@ class ApplicationTests {
             }
             System.out.println(decodes);
         }
+    }
+
+    @Test
+    void TestMap() {
+        List<Map<String, String>> mapValues = CollUtil.newArrayList();
+
+        // 添加第一个Map
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("key1", "value1");
+        map1.put("key2", "value2");
+        mapValues.add(map1);
+
+        // 添加第二个Map
+        Map<String, String> map2 = new HashMap<>();
+        map2.put("key3", "value3");
+        map2.put("key4", "value4");
+        mapValues.add(map2);
+
+        System.out.println(mapValues);
+        System.out.println(new String(ParseFileTools.serializedListMap(mapValues, ParseFileTools::serializedJSON), StandardCharsets.UTF_8));
+        System.out.println(new String(ParseFileTools.serializedListMap(mapValues, ParseFileTools::serializedXML), StandardCharsets.UTF_8));
     }
 }

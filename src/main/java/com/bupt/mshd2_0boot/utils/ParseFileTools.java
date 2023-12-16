@@ -21,6 +21,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -117,7 +118,7 @@ public class ParseFileTools {
         return csvToBean.parse();
     }
 
-   // public static <T> byte[] serializedObject(List<Map<String,String>> objects, Function<Map<String,String>, String> serializedMethod)
+    // public static <T> byte[] serializedObject(List<Map<String,String>> objects, Function<Map<String,String>, String> serializedMethod)
 
     /**
      * 序列化对象集合
@@ -177,5 +178,9 @@ public class ParseFileTools {
         } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static byte[] serializedListMap(List<Map<String, String>> objects, Function<List<Map<String, String>>, String> serializedMethod) {
+        return serializedMethod.apply(objects).getBytes(StandardCharsets.UTF_8);
     }
 }
