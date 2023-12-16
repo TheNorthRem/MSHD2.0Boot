@@ -193,12 +193,19 @@ class ApplicationTests {
 
         // 添加第二个Map
         Map<String, String> map2 = new HashMap<>();
-        map2.put("key3", "value3");
-        map2.put("key4", "value4");
+        map2.put("key1", "value3");
+        map2.put("key2", "value4");
         mapValues.add(map2);
 
         System.out.println(mapValues);
         System.out.println(new String(ParseFileTools.serializedListMap(mapValues, ParseFileTools::serializedJSON), StandardCharsets.UTF_8));
         System.out.println(new String(ParseFileTools.serializedListMap(mapValues, ParseFileTools::serializedXML), StandardCharsets.UTF_8));
+        String[] headers = new String[]{"key2", "key1"};
+        String CSVString = new String(
+                ParseFileTools.serializedListMap(
+                        mapValues,
+                        list -> ParseFileTools.serializedCSVWithHeader(list, headers)),
+                StandardCharsets.UTF_8);
+        System.out.println(CSVString);
     }
 }
