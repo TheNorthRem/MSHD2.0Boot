@@ -142,7 +142,11 @@ public class DisasterController {
     @PostMapping("/addDisasterByCode")
     @Operation(summary = "通过编码增加灾情信息")
     @Parameters({@Parameter(name="code",description = "灾情编码"),@Parameter(name="description",description = "灾情描述"),@Parameter(name = "uploaderId",description = "上传者主键")})
-    public Result addDisasterByCode(@RequestParam(name = "code") String code,@RequestParam(name = "description") String description,@RequestParam(name = "uploaderId") Integer uploaderId){
+    public Result addDisasterByCode(@RequestBody JSONObject data){
+
+        String code= data.getString("code");
+        String description=data.getString("description");
+        Integer uploaderId=data.getInteger("uploaderId");
 
         Map<String, String> decodes = encodeUtils.decodes(code);
         if(decodes==null)
