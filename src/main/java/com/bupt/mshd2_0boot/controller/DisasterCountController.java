@@ -27,4 +27,9 @@ public class DisasterCountController {
         return Result.ok(disasterCountService.list());
     }
 
+    @GetMapping("/getProvinceDisasterCount")
+    @Operation(summary = "获取灾情地域统计信息")
+    public Result getProvinceDisasterCount() {
+        return Result.ok(disasterCountService.getDisasterProvinceCount());
+    }
 }

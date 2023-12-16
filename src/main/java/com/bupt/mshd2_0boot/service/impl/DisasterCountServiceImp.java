@@ -28,7 +28,7 @@ public class DisasterCountServiceImp extends ServiceImpl<DisasterCountMapper, Di
              ) {
             String id = dc.getId();
             Integer count = dc.getCount();
-            String provinceCode = id.substring(0, 3);
+            String provinceCode = id.substring(0, 2);
             provinceCode+="0000";
             cnt.put(provinceCode,cnt.getOrDefault(provinceCode,0)+count);
         }
