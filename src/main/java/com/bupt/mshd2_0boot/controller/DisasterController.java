@@ -112,7 +112,7 @@ public class DisasterController {
             cnt.setCount(cnt.getCount() + 1);
             disasterCountService.updateById(cnt);
         }
-        return Result.ok("添加成功");
+        return Result.ok(disaster.getDisasterId());
     }
 
     @DeleteMapping("/deleteDisaster")
@@ -171,8 +171,10 @@ public class DisasterController {
 
         disasterService.save(disaster);
 
-        return Result.ok();
+
+        return Result.ok(disaster.getDisasterId());
     }
+
 
 
     @GetMapping("/getDisasterCount")
