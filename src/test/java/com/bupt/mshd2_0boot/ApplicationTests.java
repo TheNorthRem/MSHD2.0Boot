@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +164,21 @@ class ApplicationTests {
             for (var x : disasterList) {
                 System.out.println(x);
             }
+        }
+    }
+
+    @Test
+    void TestSelectType(){
+        Page<Disaster> disasterPage = disasterService.selectByType(1, 1);
+
+        List<Disaster> records = disasterPage.getRecords();
+        List<Map<String, String>> res = new ArrayList<>();
+        for (Disaster disaster : records) {
+            Map<String, String> decodes = util.decodes(disaster.getId()); //解码返回
+            if (decodes == null) {
+                continue;
+            }
+            System.out.println(decodes);
         }
     }
 }

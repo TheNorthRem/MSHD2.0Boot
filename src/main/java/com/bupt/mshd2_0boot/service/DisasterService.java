@@ -6,4 +6,5 @@ import com.bupt.mshd2_0boot.entity.Disaster;
 
 public interface DisasterService extends IService<Disaster> {
     Page<Disaster> listAll(Integer page);
+    Page<Disaster> selectByType(Integer page,Integer type);
 }

@@ -1,8 +1,11 @@
 package com.bupt.mshd2_0boot.utils;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.AddressCode;
+import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
+import com.bupt.mshd2_0boot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -12,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -21,16 +26,17 @@ public class EncodeUtils {
 
 
     private final ResourceLoader resourceLoader;
-
+    private final UserService userService;
     private JSONObject encode;
 
     private JSONObject decode;
 
     private final AddressCodeService  addressCodeService;
     @Autowired
-    public EncodeUtils(ResourceLoader resourceLoader,AddressCodeService addressCodeService){
+    public EncodeUtils(ResourceLoader resourceLoader,AddressCodeService addressCodeService,UserService userService){
         this.resourceLoader=resourceLoader;
         this.addressCodeService=addressCodeService;
+        this.userService=userService;
         parseCode();
     }
 
@@ -257,6 +263,30 @@ public class EncodeUtils {
 
         this.decode=res;
     }
+
+    public JSONObject decodePage(Page<Disaster> disasterPage){
+        List<Disaster> records = disasterPage.getRecords();
+        List<Map<String, String>> res = new ArrayList<>();
+        for (Disaster disaster : records) {
+            Map<String, String> decodes = decodes(disaster.getId()); //解码返回
+            if (decodes == null) {
+                continue;
+            }
+            decodes.put("code", disaster.getId());
+            decodes.put("description", disaster.getDescription());
+            decodes.put("uploadTime", disaster.getUploadTime().toString());
+            decodes.put("updateTime", disaster.getUpdateTime().toString());
+            decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
+            res.add(decodes);
+        }
+
+        JSONObject resObj =new JSONObject();
+        resObj.put("record",res);
+        resObj.put("pages",disasterPage.getPages());
+        resObj.put("total",disasterPage.getTotal());
+        return resObj;
+    }
+
     public static final String[] KEYWORDS ={
       "SourceType","SourceSub","LoaderType","DisasterType","DisasterSub","CategorySub","province","city","county"
             ,"town","village","Time"
