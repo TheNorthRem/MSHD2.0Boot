@@ -63,7 +63,13 @@ public class DisasterController {
             decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
             res.add(decodes);
         }
-        return Result.ok(res);
+
+        JSONObject resObj =new JSONObject();
+        resObj.put("record",res);
+        resObj.put("pages",disasterPage.getPages());
+        resObj.put("total",disasterPage.getTotal());
+
+        return Result.ok(resObj);
     }
 
     @PostMapping("/addDisasterData")
@@ -106,7 +112,7 @@ public class DisasterController {
             cnt.setCount(cnt.getCount() + 1);
             disasterCountService.updateById(cnt);
         }
-        return Result.ok("添加成功");
+        return Result.ok(disaster.getDisasterId());
     }
 
     @DeleteMapping("/deleteDisaster")
@@ -135,11 +141,14 @@ public class DisasterController {
 
     @PostMapping("/addDisasterByCode")
     @Operation(summary = "通过编码增加灾情信息")
-    @Parameters({@Parameter(name="Code",description = "灾情编码")})
-    public Result addDisasterByCode(@RequestParam(name = "code") String addressCode){
+    @Parameters({@Parameter(name="code",description = "灾情编码"),@Parameter(name="description",description = "灾情描述"),@Parameter(name = "uploaderId",description = "上传者主键")})
+    public Result addDisasterByCode(@RequestBody JSONObject data){
 
-        Map<String, String> decodes = encodeUtils.decodes(addressCode);
+        String code= data.getString("code");
+        String description=data.getString("description");
+        Integer uploaderId=data.getInteger("uploaderId");
 
+        Map<String, String> decodes = encodeUtils.decodes(code);
         if(decodes==null)
             return Result.fail("编码格式错误!");
 
@@ -147,16 +156,25 @@ public class DisasterController {
 
         QueryWrapper<Disaster> queryWrapper =  new QueryWrapper<>();
 
-        queryWrapper.eq("id",decodes);
+        queryWrapper.eq("id",code);
 
         if(disasterService.count(queryWrapper)!=0){
             return Result.fail("该灾情信息已经上传");
         }
 
+
+        disaster.setId(code);
+
+        disaster.setDescription(description);
+
+        disaster.setUploader(uploaderId);
+
         disasterService.save(disaster);
 
-        return Result.ok();
+
+        return Result.ok(disaster.getDisasterId());
     }
+
 
 
     @GetMapping("/getDisasterCount")
@@ -164,4 +182,6 @@ public class DisasterController {
     public Result getDisasterCount() {
         return Result.ok(disasterCountService.list());
     }
+
+
 }

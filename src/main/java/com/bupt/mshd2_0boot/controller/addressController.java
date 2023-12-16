@@ -65,4 +65,5 @@ public class addressController {
     public Result listVillage(@RequestParam(name = "province") String province, @RequestParam(name = "city") String city, @RequestParam(name = "county") String county, @RequestParam(name = "town") String town) {
         return addressCodeService.listVillage(province, city, county, town);
     }
+
 }

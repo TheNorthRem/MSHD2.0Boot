@@ -117,6 +117,8 @@ public class ParseFileTools {
         return csvToBean.parse();
     }
 
+   // public static <T> byte[] serializedObject(List<Map<String,String>> objects, Function<Map<String,String>, String> serializedMethod)
+
     /**
      * 序列化对象集合
      *
