@@ -41,20 +41,17 @@ public class DisasterController {
         this.disasterCountService = disasterCountService;
     }
 
-    @GetMapping("/listDisasters")
-    @Operation(summary = "查询所有的灾情信息")
-    @Parameter(name = "page",description = "页数")
-    public Result listDisasters(@RequestParam Integer page) {
-        Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
-
-        return Result.ok(encodeUtils.decodePage(disasterPage));
-    }
 
     @GetMapping("/getDisasterByType")
     @Operation(summary = "按type查询 type属性为Int  和灾情编码对应")
     @Parameters({@Parameter(name = "page",description = "页数"),@Parameter(name = "type",description = "类型")})
 
     public Result getDisasterByType(@RequestParam Integer page,@RequestParam Integer type) {
+        if(type==0){
+            Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
+            return Result.ok(encodeUtils.decodePage(disasterPage));
+        }
+
         Page<Disaster> disasterPage = disasterService.selectByType(page,type);//查询所有灾情
         return Result.ok(encodeUtils.decodePage(disasterPage));
     }
@@ -166,11 +163,6 @@ public class DisasterController {
 
 
 
-    @GetMapping("/getDisasterCount")
-    @Operation(summary = "获取灾情地域统计信息")
-    public Result getDisasterCount() {
-        return Result.ok(disasterCountService.list());
-    }
 
 
 }
