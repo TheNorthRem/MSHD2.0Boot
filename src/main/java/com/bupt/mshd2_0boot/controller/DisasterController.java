@@ -162,6 +162,9 @@ public class DisasterController {
             return Result.fail("该灾情信息已经上传");
         }
 
+
+        disaster.setId(code);
+
         disaster.setDescription(description);
 
         disaster.setUploader(uploaderId);
