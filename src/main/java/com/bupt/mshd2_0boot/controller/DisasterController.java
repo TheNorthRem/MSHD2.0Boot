@@ -41,6 +41,14 @@ public class DisasterController {
         this.disasterCountService = disasterCountService;
     }
 
+    @GetMapping("/getDisaster")
+    @Operation(summary = "返回所有灾情信息")
+    @Parameter(name = "page",description = "页数")
+
+    public Result getAllDisasters(@RequestParam Integer page) {
+        Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
+        return Result.ok(encodeUtils.decodePage(disasterPage));
+    }
 
     @GetMapping("/getDisasterByType")
     @Operation(summary = "按type查询 type属性为Int  和灾情编码对应")
