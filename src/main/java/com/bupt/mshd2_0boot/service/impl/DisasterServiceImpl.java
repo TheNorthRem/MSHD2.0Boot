@@ -24,4 +24,10 @@ public class DisasterServiceImpl extends ServiceImpl<DisasterMapper, Disaster> i
         Page<Disaster> disasterPage = new Page<>(page, Long.parseLong(EnvironmentValue.getParamSettings("pageSize")));
         return mapper.listDisaster(disasterPage);
     }
+
+    @Override
+    public Page<Disaster> selectByType(Integer page, Integer type) {
+        Page<Disaster> disasterPage = new Page<>(page, Long.parseLong(EnvironmentValue.getParamSettings("pageSize")));
+        return mapper.selectType(disasterPage,type);
+    }
 }

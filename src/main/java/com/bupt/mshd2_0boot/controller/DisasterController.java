@@ -18,10 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -49,27 +46,17 @@ public class DisasterController {
     @Parameter(name = "page",description = "页数")
     public Result listDisasters(@RequestParam Integer page) {
         Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
-        List<Disaster> records = disasterPage.getRecords();
-        List<Map<String, String>> res = new ArrayList<>();
-        for (Disaster disaster : records) {
-            Map<String, String> decodes = encodeUtils.decodes(disaster.getId()); //解码返回
-            if (decodes == null) {
-                continue;
-            }
-            decodes.put("code", disaster.getId());
-            decodes.put("description", disaster.getDescription());
-            decodes.put("uploadTime", disaster.getUploadTime().toString());
-            decodes.put("updateTime", disaster.getUpdateTime().toString());
-            decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
-            res.add(decodes);
-        }
 
-        JSONObject resObj =new JSONObject();
-        resObj.put("record",res);
-        resObj.put("pages",disasterPage.getPages());
-        resObj.put("total",disasterPage.getTotal());
+        return Result.ok(encodeUtils.decodePage(disasterPage));
+    }
 
-        return Result.ok(resObj);
+    @GetMapping("/getDisasterByType")
+    @Operation(summary = "按type查询 type属性为Int  和灾情编码对应")
+    @Parameters({@Parameter(name = "page",description = "页数"),@Parameter(name = "type",description = "类型")})
+
+    public Result getDisasterByType(@RequestParam Integer page,@RequestParam Integer type) {
+        Page<Disaster> disasterPage = disasterService.selectByType(page,type);//查询所有灾情
+        return Result.ok(encodeUtils.decodePage(disasterPage));
     }
 
     @PostMapping("/addDisasterData")
@@ -114,6 +101,8 @@ public class DisasterController {
         }
         return Result.ok(disaster.getDisasterId());
     }
+
+
 
     @DeleteMapping("/deleteDisaster")
     @Operation(summary = "删除灾情信息")
