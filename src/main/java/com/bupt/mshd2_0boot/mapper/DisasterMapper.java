@@ -12,4 +12,7 @@ public interface DisasterMapper extends BaseMapper<Disaster> {
 
     @Select("select * from disaster where SUBSTRING(id, 31, 1) = #{type}")
     Page<Disaster> selectType(Page<Disaster> page,Integer type);
+
+
+
 }

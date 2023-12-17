@@ -3,7 +3,10 @@ package com.bupt.mshd2_0boot.utils;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,5 +67,30 @@ public class Tools {
             return true;
         }
         return !str.matches(ConstData.PHONE_REGEX);
+    }
+
+    public static String formatTime(String time) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            Date date = inputFormat.parse(time);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static String formatDate(String time) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date date = inputFormat.parse(time);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

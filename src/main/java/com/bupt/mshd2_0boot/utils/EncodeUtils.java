@@ -120,7 +120,9 @@ public class EncodeUtils {
         res.put("LoaderType",decode.getJSONObject("loaderCode").getString(code.get("loaderType")));
         decodeParse("DisasterCode",code.get("DisasterType"),code.get("DisasterTypeSub"),res,"DisasterType","DisasterSub");
         decodeParse("DisasterCategory",code.get("DisasterType"),code.get("CategorySub"),res,"CategoryType","CategorySub");
-        res.put("Time",code.get("Time"));
+
+
+        res.put("Time",Tools.formatTime(code.get("Time")));
         AddressCode address = addressCodeService.getAddress(code.get("Position"));
         res.put("province",address.getProvince());
         res.put("city",address.getCity());
@@ -266,9 +268,9 @@ public class EncodeUtils {
 
     public void addDecode(Map<String, String> decodes,Disaster disaster){
         decodes.put("code", disaster.getId());
-        decodes.put("description", disaster.getDescription());
         decodes.put("uploadTime", disaster.getUploadTime().toString());
         decodes.put("updateTime", disaster.getUpdateTime().toString());
+        decodes.put("description", disaster.getDescription());
         decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
     }
 

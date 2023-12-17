@@ -20,13 +20,14 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
 @Resource
 @RequestMapping("/File")
 @Slf4j
-@Tag(name = "地址")
+@Tag(name = "文件")
 public class FileController {
 
     private final EncodeUtils encodeUtils;
@@ -101,16 +102,29 @@ public class FileController {
     public void Download( HttpServletResponse response,@RequestParam("page") Integer page,@RequestParam String requestFormat){
         Page<Disaster> disasterPage = disasterService.listAll(page);//查询所有灾情
         List<Disaster> records = disasterPage.getRecords();
+        List<Map<String,String>> result=new ArrayList<>();
+
+        for (Disaster disaster:
+             records) {
+            Map<String, String> decodes = encodeUtils.decodes(disaster.getId());
+            encodeUtils.addDecode(decodes,disaster);
+            result.add(decodes);
+        }
+
         byte[] buffer;
         switch (requestFormat){
             case "csv":
-                buffer=ParseFileTools.serializedObject(records, ParseFileTools::serializedCSV);
+
+                buffer= ParseFileTools.serializedListMap(
+                        result,
+                        list -> ParseFileTools.serializedCSVWithHeader(list, header));
+
                 break;
             case "json":
-                buffer=ParseFileTools.serializedObject(records, ParseFileTools::serializedJSON);
+                buffer=ParseFileTools.serializedListMap(result, ParseFileTools::serializedJSON);
                 break;
             case "xml":
-                buffer=ParseFileTools.serializedObject(records, ParseFileTools::serializedXML);
+                buffer=ParseFileTools.serializedListMap(result, ParseFileTools::serializedXML);
                 break;
             default:
                 return;
@@ -177,6 +191,8 @@ public class FileController {
         return Result.ok();
     }
 
+    private static final String []header={"code","province","city","county","town","village","Time","DisasterType","CategoryType","CategoryType","CategorySub"
+    ,"SourceType","SourceSub","LoaderType","description","uploadTime","updateTime","uploader"};
 
 
 }

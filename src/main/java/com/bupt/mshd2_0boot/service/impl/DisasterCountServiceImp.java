@@ -3,8 +3,10 @@ package com.bupt.mshd2_0boot.service.impl;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bupt.mshd2_0boot.entity.DisasterCount;
+import com.bupt.mshd2_0boot.entity.TimeCountEntity;
 import com.bupt.mshd2_0boot.mapper.DisasterCountMapper;
 import com.bupt.mshd2_0boot.service.DisasterCountService;
+import com.bupt.mshd2_0boot.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,10 @@ import java.util.Map;
 public class DisasterCountServiceImp extends ServiceImpl<DisasterCountMapper, DisasterCount> implements DisasterCountService {
 
 
+    private final DisasterCountMapper disasterCountMapper;
+
+    @Autowired
+    public DisasterCountServiceImp(DisasterCountMapper disasterCountMapper){ this.disasterCountMapper=disasterCountMapper;}
 
 
     @Override
@@ -34,5 +40,17 @@ public class DisasterCountServiceImp extends ServiceImpl<DisasterCountMapper, Di
         }
 
         return cnt;
+    }
+
+    @Override
+    public List<TimeCountEntity> getTimeCount() {
+        List<TimeCountEntity> timeCountEntities = disasterCountMapper.selectCountByTime();
+
+        for (TimeCountEntity entity:
+                timeCountEntities) {
+            entity.setTime(Tools.formatDate(entity.getTime()));
+        }
+
+        return timeCountEntities;
     }
 }
