@@ -264,6 +264,14 @@ public class EncodeUtils {
         this.decode=res;
     }
 
+    public void addDecode(Map<String, String> decodes,Disaster disaster){
+        decodes.put("code", disaster.getId());
+        decodes.put("description", disaster.getDescription());
+        decodes.put("uploadTime", disaster.getUploadTime().toString());
+        decodes.put("updateTime", disaster.getUpdateTime().toString());
+        decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
+    }
+
     public JSONObject decodePage(Page<Disaster> disasterPage){
         List<Disaster> records = disasterPage.getRecords();
         List<Map<String, String>> res = new ArrayList<>();
@@ -272,11 +280,7 @@ public class EncodeUtils {
             if (decodes == null) {
                 continue;
             }
-            decodes.put("code", disaster.getId());
-            decodes.put("description", disaster.getDescription());
-            decodes.put("uploadTime", disaster.getUploadTime().toString());
-            decodes.put("updateTime", disaster.getUpdateTime().toString());
-            decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
+            addDecode(decodes,disaster);
             res.add(decodes);
         }
 
