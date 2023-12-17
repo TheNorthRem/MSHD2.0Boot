@@ -167,7 +167,19 @@ public class DisasterController {
 
         return Result.ok(disaster.getDisasterId());
     }
+    @GetMapping("/getDisasterDetail")
+    @Operation(summary = "获取灾情详情")
+    @Parameter(name="code",description = "灾情码")
+    public Result getDisasterDetail(@RequestParam(name="code") String code){
 
+        QueryWrapper<Disaster> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("id",code);
+        Disaster disaster = disasterService.getOne(queryWrapper);
+        if (disaster == null) return Result.fail("灾情码不存在");
+        Map<String, String> decodes = encodeUtils.decodes(disaster.getId());
+        encodeUtils.addDecode(decodes,disaster);
+        return Result.ok(decodes);
+    }
 
 
 

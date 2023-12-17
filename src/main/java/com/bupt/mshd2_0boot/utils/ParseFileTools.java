@@ -3,6 +3,7 @@ package com.bupt.mshd2_0boot.utils;
 import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -21,6 +22,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -117,8 +119,6 @@ public class ParseFileTools {
         return csvToBean.parse();
     }
 
-   // public static <T> byte[] serializedObject(List<Map<String,String>> objects, Function<Map<String,String>, String> serializedMethod)
-
     /**
      * 序列化对象集合
      *
@@ -175,6 +175,45 @@ public class ParseFileTools {
             statefulBeanToCsv.write(objects);
             return stringWriter.toString();
         } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 序列化对象集合
+     *
+     * @param objects          序列化对象集合
+     * @param serializedMethod 序列化方法(返回值是String,可以复用)
+     * @return 序列化之后UTF_8的字节流
+     */
+    public static byte[] serializedListMap(List<Map<String, String>> objects, Function<List<Map<String, String>>, String> serializedMethod) {
+        return serializedMethod.apply(objects).getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 序列化对象集合(指定CSV头顺序),要求List集合中的Map中的Key全部相同
+     *
+     * @param mapValues 序列化对象集合
+     * @param csvHeader CSV头的顺序
+     * @return 序列化之后UTF_8的字节流
+     */
+    public static String serializedCSVWithHeader(List<Map<String, String>> mapValues, String[] csvHeader) {
+        try (StringWriter stringWriter = new StringWriter();
+             CSVWriter csvWriter = new CSVWriter(stringWriter)) {
+            csvWriter.writeNext(csvHeader);
+
+            for (var map : mapValues) {
+                String[] csvLine = new String[csvHeader.length];
+
+                for (int i = 0; i < csvHeader.length; i++) {
+                    csvLine[i] = map.get(csvHeader[i]);
+                }
+
+                csvWriter.writeNext(csvLine);
+            }
+
+            return stringWriter.toString();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
