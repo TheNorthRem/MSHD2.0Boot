@@ -1,9 +1,8 @@
 package com.bupt.mshd2_0boot.service.impl;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bupt.mshd2_0boot.entity.DisasterCount;
-import com.bupt.mshd2_0boot.entity.TimeCountEntity;
+import com.bupt.mshd2_0boot.entity.CountEntity;
 import com.bupt.mshd2_0boot.mapper.DisasterCountMapper;
 import com.bupt.mshd2_0boot.service.DisasterCountService;
 import com.bupt.mshd2_0boot.utils.Tools;
@@ -43,14 +42,24 @@ public class DisasterCountServiceImp extends ServiceImpl<DisasterCountMapper, Di
     }
 
     @Override
-    public List<TimeCountEntity> getTimeCount() {
-        List<TimeCountEntity> timeCountEntities = disasterCountMapper.selectCountByTime();
+    public List<CountEntity> getTimeCount() {
+        List<CountEntity> timeCountEntities = disasterCountMapper.selectCountByTime();
 
-        for (TimeCountEntity entity:
+        for (CountEntity entity:
                 timeCountEntities) {
-            entity.setTime(Tools.formatDate(entity.getTime()));
+            entity.setCategory(Tools.formatDate(entity.getCategory()));
         }
 
         return timeCountEntities;
+    }
+
+    @Override
+    public List<CountEntity> getTypeCount() {
+        return disasterCountMapper.selectCountByType();
+    }
+
+    @Override
+    public List<CountEntity> getLoaderCount() {
+        return disasterCountMapper.selectCountByLoader();
     }
 }
