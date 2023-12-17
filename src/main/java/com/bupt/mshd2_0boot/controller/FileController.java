@@ -46,9 +46,9 @@ public class FileController {
     public Result Upload(@RequestPart("file") MultipartFile file,@RequestParam("uploaderId") Integer Id){
         log.info("Upload!!!");
         File csv = new File(System.getProperty("java.io.tmpdir"));
-        if(!csv.mkdir()) return Result.fail("ERROR");
+        csv.mkdir();
         log.info("Upload!!!");
-        File tmp;
+        File tmp=null;
         String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
         try {
             tmp = File.createTempFile("tmp", format);
@@ -94,6 +94,9 @@ public class FileController {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }finally {
+            if(tmp!=null)
+                tmp.delete();
         }
         return Result.ok();
     }
