@@ -47,7 +47,7 @@ public class FileController {
 
         File csv = new File(System.getProperty("java.io.tmpdir"));
         if(!csv.mkdir()) return Result.fail("ERROR");
-
+        System.out.println("Upload!!!");
         File tmp;
         String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
         try {
@@ -69,9 +69,11 @@ public class FileController {
                     break;
                 default:
                     return Result.fail("文件格式错误");
+
+
             }
 
-
+            System.out.println("---"+disasterList);
 
             for (Disaster disaster:disasterList) {
                 disaster.setUploader(Id);
