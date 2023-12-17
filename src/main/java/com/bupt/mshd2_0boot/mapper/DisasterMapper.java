@@ -6,7 +6,7 @@ import com.bupt.mshd2_0boot.entity.Disaster;
 import org.apache.ibatis.annotations.Select;
 
 public interface DisasterMapper extends BaseMapper<Disaster> {
-    @Select("select * from disaster order by upload_time desc ")
+    @Select("select * from disaster order by update_time desc ")
     Page<Disaster> listDisaster(Page<Disaster> page);
 
 
