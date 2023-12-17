@@ -27,6 +27,12 @@ public class DisasterCountController {
         return Result.ok(disasterCountService.list());
     }
 
+    @GetMapping("/getDisasterDateCount")
+    @Operation(summary = "时间统计")
+    public Result getDisasterDateCount() {
+        return Result.ok(disasterCountService.getTimeCount());
+    }
+
     @GetMapping("/getProvinceDisasterCount")
     @Operation(summary = "获取灾情地域统计信息")
     public Result getProvinceDisasterCount() {
