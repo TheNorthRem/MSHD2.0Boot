@@ -47,7 +47,7 @@ public class FileController {
 
         File csv = new File(System.getProperty("java.io.tmpdir"));
         if(!csv.mkdir()) return Result.fail("ERROR");
-        System.out.println("Upload!!!");
+        log.info("Upload!!!");
         File tmp;
         String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
         try {
@@ -73,7 +73,7 @@ public class FileController {
 
             }
 
-            System.out.println("---"+disasterList);
+            log.info("---"+disasterList);
 
             for (Disaster disaster:disasterList) {
                 disaster.setUploader(Id);
