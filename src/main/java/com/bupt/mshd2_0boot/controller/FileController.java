@@ -44,7 +44,7 @@ public class FileController {
     @Operation(summary = "基于文件进行灾情信息上传")
     @Parameters({@Parameter(name="file",description = "文件"),@Parameter(name="uploaderId",description ="上传者Id")})
     public Result Upload(@RequestPart("file") MultipartFile file,@RequestParam("uploaderId") Integer Id){
-
+        log.info("Upload!!!");
         File csv = new File(System.getProperty("java.io.tmpdir"));
         if(!csv.mkdir()) return Result.fail("ERROR");
         log.info("Upload!!!");
