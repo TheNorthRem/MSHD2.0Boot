@@ -1,5 +1,6 @@
 package com.bupt.mshd2_0boot.config;
 
+import com.bupt.mshd2_0boot.utils.Interceptor.LoginInterceptor;
 import com.bupt.mshd2_0boot.utils.Interceptor.RefreshTokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -15,6 +16,10 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 登录拦截器 order 1 后执行
+        registry.addInterceptor(new LoginInterceptor()).
+                excludePathPatterns("/login/**").
+                order(1);
         // 前置拦截器 order 0 先执行
         registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).
                 order(0);
