@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         long count = this.count(queryWrapper);
         // 查询到说明已经被注册
         if (count != 0) {
-            return Result.fail("用户名已经被注册!");
+            return Result.fail("用户名已经被注册!(电话号码重复)");
         }
         //privilege为0.默认是普通用户
         User user = new User(null, userName, password, phone, "", Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), 0);
