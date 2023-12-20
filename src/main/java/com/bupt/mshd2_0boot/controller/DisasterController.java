@@ -89,7 +89,15 @@ public class DisasterController {
         Disaster disaster = new Disaster();
         disaster.setId(encodes);
         disaster.setDescription(data.getString("description")); //补充描述信息
-        disaster.setUploader(data.getInteger("uploader"));
+        Integer uploader = data.getInteger("uploader");
+
+        if(uploader==null){
+            return Result.fail("uploader 为空");
+        }
+
+        disaster.setUploader(uploader);
+
+
         disasterService.save(disaster);
         String addressCode = encodes.substring(0, 5) + "0";//通过灾情码前5位提取行政区代码
         DisasterCount cnt = disasterCountService.getById(addressCode);
@@ -98,6 +106,7 @@ public class DisasterController {
             DisasterCount disasterCount = new DisasterCount();
             disasterCount.setId(addressCode);
             disasterCount.setCount(1);
+
             disasterCountService.save(disasterCount);
         } else {
             cnt.setCount(cnt.getCount() + 1);

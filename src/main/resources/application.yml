@@ -27,7 +27,7 @@ logging:
 server:
   port: 8077
 
-file_path: "D:/Programing/WorkSpace/MSHDResource/"
+file_path: "D:\\MSHDResource\\"
 
 # others
 GaodeKey: "e9e73ff0da55fd71b277287462d2dcc7" # 高德api的key

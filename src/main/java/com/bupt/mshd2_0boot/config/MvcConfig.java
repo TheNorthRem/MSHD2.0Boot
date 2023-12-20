@@ -17,9 +17,9 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 登录拦截器 order 1 后执行
-        registry.addInterceptor(new LoginInterceptor()).
-                excludePathPatterns("/User/**").
-                order(1);
+//        registry.addInterceptor(new LoginInterceptor()).
+//                excludePathPatterns("/User/**").
+//                order(1);
         // 前置拦截器 order 0 先执行
         registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).
                 order(0);

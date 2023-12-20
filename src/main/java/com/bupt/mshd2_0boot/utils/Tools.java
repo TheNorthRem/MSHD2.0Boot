@@ -42,20 +42,20 @@ public class Tools {
 
     public  static boolean CheckFormat(String loaderType,String format){
         switch (loaderType){
-            case "0":
+            case "文字":
                 if (!format.equals(".txt")) return false;
                 break;
-            case "1":
+            case "图像":
                 if(!image.contains(format)) return false;
                 break;
-            case "2":
+            case "音频":
                 if(!sound.contains(format)) return false;
                 break;
 
-            case"3":
+            case"视频":
                 if(!video.contains(format)) return false;
                 break;
-            case"4":
+            case"其它":
                 return true;
         }
 

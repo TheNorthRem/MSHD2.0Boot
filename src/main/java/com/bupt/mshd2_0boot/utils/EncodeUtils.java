@@ -86,9 +86,25 @@ public class EncodeUtils {
             code += time;
 //            对各大类分别进行编码
             code += encodeParse(data, "SourceCode", "SourceType", "SourceSub");
+            if(code.contains("null")){
+                log.error(code+"SourceCode");
+                return null;
+            }
             code += this.encode.getJSONObject("LoaderCode").getString(data.get("LoaderType"));
+            if(code.contains("null")){
+                log.error(code+"Loader");
+                return null;
+            }
             code += encodeParse(data, "DisasterCode", "DisasterType", "DisasterSub");
+            if(code.contains("null")){
+                log.error(code+"Disaster");
+                return null;
+            }
             code += encodeParse(data, "DisasterCategory", "DisasterType", "CategorySub");
+            if(code.contains("null")){
+                log.error(code+"Category");
+                return null;
+            }
         }catch(NullPointerException e){
             log.error("传入信息错误!");
             return null;

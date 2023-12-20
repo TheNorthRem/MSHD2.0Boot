@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 @RestController
@@ -101,6 +102,39 @@ public class FileController {
         return Result.ok();
     }
 
+    @GetMapping("/DownloadLoader")
+    @Operation(summary = "载体下载")
+
+    public Result DownloadLoader( HttpServletResponse response,@RequestParam(name = "disasterId") Integer disasterId){
+        Disaster byId = disasterService.getById(disasterId);
+        String filePath = byId.getFilePath();
+        if(filePath==null) return Result.fail("载体不存在");
+
+        filePath= EnvironmentValue.getParamSettings("file_path")+filePath;
+
+        File file = new File(filePath);
+
+        if(!file.exists()) return  Result.fail("载体不存在");
+
+        try {
+            byte buffer[]= Files.readAllBytes(file.toPath());
+            response.reset();
+            response.setCharacterEncoding("UTF-8");
+            response.addHeader("Content-Disposition","attachment;filename="+file.getName());
+            response.addHeader("Content-Length",""+buffer.length);
+            response.addHeader("Access-Control-Allow-Origin","http://localhost:9528");
+            OutputStream outputStream=new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            outputStream.write(buffer);
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+
     @GetMapping("/download")
     @Operation(summary = "表单下载")
     @Parameters({@Parameter(name = "page",description = "下载第几页的数据"),@Parameter(name= "requestFormat",description = "下载格式，从 csv json xml 三个选一个 必须严格一致否则无法调用接口")})
@@ -169,6 +203,8 @@ public class FileController {
         Map<String, String> decodes = encodeUtils.decodes(disaster.getId());
 
         String loaderType = decodes.get("LoaderType");
+
+        System.out.println(loaderType+ "  "+format);
 
         if(!Tools.CheckFormat(loaderType,format)){
             return Result.fail("文件格式不合规");
