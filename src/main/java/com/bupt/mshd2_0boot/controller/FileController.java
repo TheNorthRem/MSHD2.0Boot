@@ -116,7 +116,7 @@ public class FileController {
             response.setCharacterEncoding("UTF-8");
             response.addHeader("Content-Disposition","attachment;filename="+file.getName());
             response.addHeader("Content-Length",""+buffer.length);
-            response.addHeader("Access-Control-Allow-Origin","http://localhost:9528");
+            response.addHeader("Access-Control-Allow-Origin","*");
             OutputStream outputStream=new BufferedOutputStream(response.getOutputStream());
             response.setContentType("application/octet-stream");
             outputStream.write(buffer);
@@ -161,7 +161,7 @@ public class FileController {
             response.setCharacterEncoding("UTF-8");
             response.addHeader("Content-Disposition","attachment;filename=data."+requestFormat);
             response.addHeader("Content-Length",""+buffer.length);
-            response.addHeader("Access-Control-Allow-Origin","http://localhost:9528");
+            response.addHeader("Access-Control-Allow-Origin","*");
             OutputStream outputStream=new BufferedOutputStream(response.getOutputStream());
             response.setContentType("application/octet-stream");
             outputStream.write(buffer);
