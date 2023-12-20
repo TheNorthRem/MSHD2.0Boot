@@ -76,4 +76,10 @@ public class UserController {
     public Result message() {
         return userService.message();
     }
+
+    @GetMapping("/list")
+    @Operation(summary = "获取所有用户信息(仅管理员端可操作)")
+    public Result userList() {
+        return userService.userList();
+    }
 }

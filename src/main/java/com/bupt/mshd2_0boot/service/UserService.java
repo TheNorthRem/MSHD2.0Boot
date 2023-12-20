@@ -57,4 +57,10 @@ public interface UserService extends IService<User> {
      * @return 当前用户脱敏信息/未登录返回报错
      */
     Result message();
+
+    /**
+     *
+     * @return 成功:所有用户信息|失败:错误信息
+     */
+    Result userList();
 }
