@@ -20,7 +20,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -57,21 +56,16 @@ public class FileController {
 
             List<Disaster> disasterList;
 
-            switch (format){
-                case ".csv":
-                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseCSV);
-                    break;
-                case ".json":
-                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseJSON);
-
-                    break;
-                case ".xml":
-                    disasterList=ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseXML);
-                    break;
-                default:
+            switch (format) {
+                case ".csv" ->
+                        disasterList = ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseCSV);
+                case ".json" ->
+                        disasterList = ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseJSON);
+                case ".xml" ->
+                        disasterList = ParseFileTools.parseFile(tmp, Disaster.class, false, ParseFileTools::parseXML);
+                default -> {
                     return Result.fail("文件格式错误");
-
-
+                }
             }
 
             log.info("---"+disasterList);
@@ -117,7 +111,7 @@ public class FileController {
         if(!file.exists()) return  Result.fail("载体不存在");
 
         try {
-            byte buffer[]= Files.readAllBytes(file.toPath());
+            byte[] buffer = Files.readAllBytes(file.toPath());
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.addHeader("Content-Disposition","attachment;filename="+file.getName());
@@ -151,22 +145,15 @@ public class FileController {
         }
 
         byte[] buffer;
-        switch (requestFormat){
-            case "csv":
-
-                buffer= ParseFileTools.serializedListMap(
-                        result,
-                        list -> ParseFileTools.serializedCSVWithHeader(list, header));
-
-                break;
-            case "json":
-                buffer=ParseFileTools.serializedListMap(result, ParseFileTools::serializedJSON);
-                break;
-            case "xml":
-                buffer=ParseFileTools.serializedListMap(result, ParseFileTools::serializedXML);
-                break;
-            default:
+        switch (requestFormat) {
+            case "csv" -> buffer = ParseFileTools.serializedListMap(
+                    result,
+                    list -> ParseFileTools.serializedCSVWithHeader(list, header));
+            case "json" -> buffer = ParseFileTools.serializedListMap(result, ParseFileTools::serializedJSON);
+            case "xml" -> buffer = ParseFileTools.serializedListMap(result, ParseFileTools::serializedXML);
+            default -> {
                 return;
+            }
         }
 
         try {

@@ -86,6 +86,14 @@ public class DisasterController {
             return Result.fail("信息有误");
         }
 
+        QueryWrapper<Disaster> queryWrapper =  new QueryWrapper<>();
+
+        queryWrapper.eq("id",encodes);
+
+        if(disasterService.count(queryWrapper)!=0){
+            return Result.fail("该灾情信息已经上传");
+        }
+
         Disaster disaster = new Disaster();
         disaster.setId(encodes);
         disaster.setDescription(data.getString("description")); //补充描述信息

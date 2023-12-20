@@ -59,7 +59,7 @@ public class Tools {
                 return true;
         }
 
-            return false;
+            return true;
     }
 
     private static boolean mismatch(String str) {
