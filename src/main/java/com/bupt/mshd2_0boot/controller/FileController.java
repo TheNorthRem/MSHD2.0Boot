@@ -44,11 +44,11 @@ public class FileController {
     @Operation(summary = "基于文件进行灾情信息上传")
     @Parameters({@Parameter(name="file",description = "文件"),@Parameter(name="uploaderId",description ="上传者Id")})
     public Result Upload(@RequestPart("file") MultipartFile file,@RequestParam("uploaderId") Integer Id){
-
+        log.info("Upload!!!");
         File csv = new File(System.getProperty("java.io.tmpdir"));
-        if(!csv.mkdir()) return Result.fail("ERROR");
-
-        File tmp;
+        csv.mkdir();
+        log.info("Upload!!!");
+        File tmp=null;
         String format = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.'));
         try {
             tmp = File.createTempFile("tmp", format);
@@ -69,9 +69,11 @@ public class FileController {
                     break;
                 default:
                     return Result.fail("文件格式错误");
+
+
             }
 
-
+            log.info("---"+disasterList);
 
             for (Disaster disaster:disasterList) {
                 disaster.setUploader(Id);
@@ -92,6 +94,9 @@ public class FileController {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }finally {
+            if(tmp!=null)
+                tmp.delete();
         }
         return Result.ok();
     }

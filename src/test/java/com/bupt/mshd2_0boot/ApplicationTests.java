@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
-import com.bupt.mshd2_0boot.entity.TimeCountEntity;
+import com.bupt.mshd2_0boot.entity.CountEntity;
 import com.bupt.mshd2_0boot.service.AddressCodeService;
 import com.bupt.mshd2_0boot.service.DisasterCountService;
 import com.bupt.mshd2_0boot.service.DisasterService;
@@ -214,7 +214,7 @@ class ApplicationTests {
 
     @Test
     public void TestCount(){
-        List<TimeCountEntity> timeCount = disasterCountService.getTimeCount();
+        List<CountEntity> timeCount = disasterCountService.getTimeCount();
         System.out.println(timeCount);
     }
 

@@ -38,4 +38,17 @@ public class DisasterCountController {
     public Result getProvinceDisasterCount() {
         return Result.ok(disasterCountService.getDisasterProvinceCount());
     }
+
+    @GetMapping("/getLoaderCount")
+    @Operation(summary = "获取灾情载体统计信息")
+    public Result getLoaderCount() {
+        return Result.ok(disasterCountService.getLoaderCount());
+    }
+
+    @GetMapping("/getTypeCount")
+    @Operation(summary = "获取灾情载体统计信息")
+    public Result getTypeCount() {
+        return Result.ok(disasterCountService.getTypeCount());
+    }
+
 }
