@@ -198,12 +198,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result userList() {
+        // ThreadLocal拿缓存信息
         UserDTO userDTO = UserHolder.getUser();
 
+        // 是否登录
         if (userDTO == null) {
             return Result.fail("管理员未登录!");
         }
 
+        // 是否是管理员
         if (!userDTO.getPrivilege().equals(1)) {
             return Result.fail("权限不足!");
         }
