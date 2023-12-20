@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bupt.mshd2_0boot.entity.Disaster;
 import com.bupt.mshd2_0boot.entity.DisasterCount;
-import com.bupt.mshd2_0boot.entity.User;
 import com.bupt.mshd2_0boot.service.DisasterCountService;
 import com.bupt.mshd2_0boot.service.DisasterService;
-import com.bupt.mshd2_0boot.service.UserService;
 import com.bupt.mshd2_0boot.utils.EncodeUtils;
 import com.bupt.mshd2_0boot.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,15 +27,13 @@ public class DisasterController {
     private final DisasterService disasterService;
     private final EncodeUtils encodeUtils;
 
-    private final UserService userService;
 
     private final DisasterCountService disasterCountService;
 
     @Autowired
-    public DisasterController(DisasterService disasterService, EncodeUtils encodeUtils, UserService userService, DisasterCountService disasterCountService) {
+    public DisasterController(DisasterService disasterService, EncodeUtils encodeUtils, DisasterCountService disasterCountService) {
         this.disasterService = disasterService;
         this.encodeUtils = encodeUtils;
-        this.userService = userService;
         this.disasterCountService = disasterCountService;
     }
 
