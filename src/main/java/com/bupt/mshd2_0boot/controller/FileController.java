@@ -219,13 +219,7 @@ public class FileController {
         return Result.ok();
     }
 
-    @DeleteMapping("DeleteDisaster")
-    @Operation(summary = "删除灾情")
-    @Parameters({@Parameter(name = "disasterId",description = "灾情主键"),@Parameter(name = "userId",description = "用户主键")})
 
-    public Result deleteDisaster(@RequestParam(name = "disasterId") Integer disasterId){
-        return Result.ok(disasterService.removeById(disasterId));
-    }
     private static final String []header={"code","province","city","county","town","village","Time","DisasterType","CategoryType","CategoryType","CategorySub"
     ,"SourceType","SourceSub","LoaderType","description","uploadTime","updateTime","uploader"};
 
