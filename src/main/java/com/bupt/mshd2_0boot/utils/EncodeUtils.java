@@ -288,6 +288,7 @@ public class EncodeUtils {
         decodes.put("updateTime", disaster.getUpdateTime().toString());
         decodes.put("description", disaster.getDescription());
         decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
+        decodes.put("id",disaster.getDisasterId().toString());
     }
 
     public JSONObject decodePage(Page<Disaster> disasterPage){
@@ -300,6 +301,7 @@ public class EncodeUtils {
             }
             addDecode(decodes,disaster);
             res.add(decodes);
+
         }
 
         JSONObject resObj =new JSONObject();
