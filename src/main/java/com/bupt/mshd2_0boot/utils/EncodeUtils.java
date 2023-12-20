@@ -289,6 +289,12 @@ public class EncodeUtils {
         decodes.put("description", disaster.getDescription());
         decodes.put("uploader", userService.getById(disaster.getUploader()).getUsername());
         decodes.put("id",disaster.getDisasterId().toString());
+        String path = disaster.getFilePath();
+        if(path!=null){
+            path=path.substring(path.lastIndexOf("/")+1);
+            decodes.put("loaderFileName",path);
+        }
+
     }
 
     public JSONObject decodePage(Page<Disaster> disasterPage){
