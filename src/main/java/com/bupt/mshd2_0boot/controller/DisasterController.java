@@ -127,14 +127,8 @@ public class DisasterController {
 
     @DeleteMapping("/deleteDisaster")
     @Operation(summary = "删除灾情信息")
-    @Parameters({@Parameter(name = "Id", description = "灾害主键"), @Parameter(name = "userId", description = "用户主键")})
-    public Result deleteDisaster(@RequestParam Integer Id, @RequestParam Integer userId) {
-        User user = userService.getById(userId); //获取用户
-        if (user == null) {
-            return Result.fail("用户不存在");
-        }
-
-        if (user.getPrivilege() == 0) return Result.fail("无权限"); //检测权限
+    @Parameter(name = "Id", description = "灾害主键")
+    public Result deleteDisaster(@RequestParam Integer Id) {
 
         Disaster disaster = disasterService.getById(Id);
 
