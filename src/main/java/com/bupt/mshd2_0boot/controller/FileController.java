@@ -113,7 +113,6 @@ public class FileController {
         try {
             byte[] buffer = Files.readAllBytes(file.toPath());
             response.reset();
-            response.setCharacterEncoding("UTF-8");
             response.addHeader("Content-Disposition","attachment;filename="+file.getName());
             response.addHeader("Content-Length",""+buffer.length);
             response.addHeader("Access-Control-Allow-Origin","*");
