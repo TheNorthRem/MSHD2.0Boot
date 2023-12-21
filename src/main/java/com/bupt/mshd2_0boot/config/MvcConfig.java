@@ -23,8 +23,8 @@ public class MvcConfig implements WebMvcConfigurer {
 //                order(1);
         // 前置拦截器 order 0 先执行
         registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).
-                order(0);
-        registry.addInterceptor(new ResponseThreadLocalInterceptor()).
                 order(1);
+        registry.addInterceptor(new ResponseThreadLocalInterceptor()).
+                order(0);
     }
 }
