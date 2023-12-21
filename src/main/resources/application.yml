@@ -21,13 +21,13 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-logging:
-  level:
-    com.bupt.mshd2_0boot.mapper: debug
+#logging:
+#  level:
+#    com.bupt.mshd2_0boot.mapper: debug
 server:
   port: 8077
 
-file_path: "D:\\MSHDResource\\"
+file_path: "/root/MSHD_file/"
 
 # others
 GaodeKey: "e9e73ff0da55fd71b277287462d2dcc7" # 高德api的key

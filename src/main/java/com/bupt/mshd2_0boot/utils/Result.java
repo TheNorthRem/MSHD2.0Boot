@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.net.HttpURLConnection;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,17 +16,35 @@ public class Result {
     private String errorMsg;
     private Object data;
     private Long total;
-    private int statusCode; // 新增状态码字段
+
+    // 设置返回状态码
+    private static final ThreadLocal<HttpServletResponse> responseThreadLocal = new ThreadLocal<>();
 
     public static Result ok() {
-        return new Result(true, null, null, null, 200); // 默认状态码为200
+        return new Result(true, null, null, null); // 默认状态码为200
     }
 
     public static Result ok(Object data) {
-        return new Result(true, null, data, null, 200);
+        return new Result(true, null, data, null);
     }
 
     public static Result fail(String errorMsg) {
-        return new Result(false, errorMsg, null, null, 400); // 默认失败状态码为400
+        int statusCode = HttpURLConnection.HTTP_BAD_REQUEST; // 默认状态码为400
+        HttpServletResponse response = responseThreadLocal.get();
+        // 设置HTTP状态码为400
+        if (response != null) {
+            response.setStatus(statusCode);
+        }
+        return new Result(false, errorMsg, null, null); // 默认失败状态码为400
+    }
+
+    // 设置 ThreadLocal 中的 HttpServletResponse
+    public static void setResponse(HttpServletResponse response) {
+        responseThreadLocal.set(response);
+    }
+
+    // 清除 ThreadLocal 中的 HttpServletResponse
+    public static void clearResponse() {
+        responseThreadLocal.remove();
     }
 }

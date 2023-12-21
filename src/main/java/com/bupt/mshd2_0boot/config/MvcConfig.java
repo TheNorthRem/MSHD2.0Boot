@@ -2,6 +2,7 @@ package com.bupt.mshd2_0boot.config;
 
 import com.bupt.mshd2_0boot.utils.Interceptor.LoginInterceptor;
 import com.bupt.mshd2_0boot.utils.Interceptor.RefreshTokenInterceptor;
+import com.bupt.mshd2_0boot.utils.Interceptor.ResponseThreadLocalInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,5 +24,7 @@ public class MvcConfig implements WebMvcConfigurer {
         // 前置拦截器 order 0 先执行
         registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).
                 order(0);
+        registry.addInterceptor(new ResponseThreadLocalInterceptor()).
+                order(1);
     }
 }
