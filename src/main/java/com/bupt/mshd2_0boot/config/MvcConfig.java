@@ -1,6 +1,5 @@
 package com.bupt.mshd2_0boot.config;
 
-import com.bupt.mshd2_0boot.utils.Interceptor.LoginInterceptor;
 import com.bupt.mshd2_0boot.utils.Interceptor.RefreshTokenInterceptor;
 import com.bupt.mshd2_0boot.utils.Interceptor.ResponseThreadLocalInterceptor;
 import org.springframework.context.annotation.Configuration;
