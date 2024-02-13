@@ -1,13 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://bj-cynosdbmysql-grp-p55yr6pq.sql.tencentcdb.com:29754/MSHD2?useSSL=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: syc
-    password: syc123456!
+    url: jdbc:mysql://?/MSHD2?useSSL=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username:
+    password:
   data:
     redis:
       database: 0
-      host: 82.157.75.213
+      host:
       lettuce:
         pool:
           max-active: -1
@@ -16,7 +16,7 @@ spring:
           min-idle: 0
         shutdown-timeout: 100ms
       port: 6379
-      password: yy123456!
+      password:
   servlet:
     multipart:
       max-file-size: 100MB
