@@ -8,10 +8,10 @@ import mysql.connector
 import pandas as pd
 
 # 连接数据库
-url: str = "bj-cynosdbmysql-grp-p55yr6pq.sql.tencentcdb.com"
-port: str = "29754"
-user: str = "syc"
-password: str = "syc123456!"
+url: str = "xxxxx"
+port: str = "xxxx"
+user: str = "xxx"
+password: str = "xxxxx"
 dataBase: str = "MSHD2"
 
 # 连接数据库
@@ -40,7 +40,7 @@ sheetNames: List[str] = [
     "region_code(9)",
 ]
 
-# 将数据插入数据库中
+# 将数据插入数据库中(之前大作业的文件，现在直接导入SQL脚本即可)
 for sheetName in sheetNames:
     df: pd.DataFrame = pd.read_excel(filePath, sheet_name=sheetName)
 
